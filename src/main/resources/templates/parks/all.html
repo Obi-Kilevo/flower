@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All National Parks | ParkAdventure</title>
+
+    <!-- Use the same CSS as your main page -->
+    <style>
+        /* Copy ALL CSS from your main page here - everything from <style> tag */
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0a4d2b;
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #a8e6cf;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            width: 300px;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        #search-btn {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            padding: 0 1.2rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        #search-btn:hover {
+            background: #e07b00;
+        }
+
+        /* Hero Section with Slideshow */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Hero Search Bar */
+        .hero-search-bar {
+            display: flex;
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .hero-search-field {
+            flex: 1;
+            padding: 1rem;
+            border-right: 1px solid #eee;
+        }
+
+        .hero-search-field:last-child {
+            border-right: none;
+        }
+
+        .hero-search-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0a4d2b;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .hero-search-value {
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        .hero-search-clear {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .hero-search-btn {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            padding: 0 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero-search-btn:hover {
+            background: #e07b00;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: #ff8c00;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            background: #e07b00;
+        }
+
+        /* Section Common Styles */
+        section {
+            scroll-margin-top: 80px;
+        }
+
+        .section-heading {
+            color: #0a4d2b;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        /* Parks Grid */
+        .parks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .park-card {
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            min-height: 500px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .park-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+            z-index: 2;
+        }
+
+        .park-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .park-content {
+            position: relative;
+            z-index: 3;
+            padding: 2rem;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .park-content h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .park-location {
+            color: #f8f9fa;
+            font-style: italic;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .park-location::before {
+            content: "📍";
+        }
+
+        .park-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .park-feature {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .park-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a4d2b;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* All Parks Page Specific */
+        .all-parks-header {
+            background: linear-gradient(rgba(10, 77, 43, 0.9), rgba(10, 77, 43, 0.8)),
+            url('https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 5%;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .all-parks-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .all-parks-header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .parks-count {
+            background: #ff8c00;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: #0a4d2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 2rem 0;
+        }
+
+        .nav-button:hover {
+            background: #083b21;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-search-bar {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            .hero-search-field {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+
+            .hero-search-field:last-child {
+                border-bottom: none;
+            }
+
+            .hero-search-btn {
+                padding: 1rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .section-heading {
+                font-size: 1.8rem;
+            }
+
+            .parks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .park-card {
+                min-height: 450px;
+            }
+
+            .all-parks-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .all-parks-header {
+                padding: 4rem 5%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<!-- Header - EXACTLY same as main page -->
+<header>
+    <div class="header-container">
+        <div class="logo">ParkAdventure</div>
+
+        <!-- Main Navigation -->
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#national-parks">National Parks</a></li>
+                <li><a href="#routes">Routes</a></li>
+                <li><a href="#epic-adventures">Epic Adventures</a></li>
+                <li><a href="#popular-trips">Popular Trips</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Search Bar with Button -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search parks, adventures...">
+            <button id="search-btn">Search</button>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section - EXACTLY same as main page -->
+<section class="hero">
+    <div class="hero-slides">
+        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Discover All National Parks</h1>
+
+        <!-- Hero Search Bar -->
+        <div class="hero-search-bar">
+            <!-- Where To Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>📍</span>
+                    <span>Where To</span>
+                </div>
+                <div class="hero-search-value" id="hero-where-to">All Parks</div>
+                <button class="hero-search-clear" id="clear-where-to">&times;</button>
+            </div>
+
+            <!-- Start Date Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>📅</span>
+                    <span>Start Date</span>
+                </div>
+                <div class="hero-search-value" id="hero-start-date">Select Date</div>
+                <input type="date" id="hero-date-input" style="display: none; width: 100%; margin-top: 0.3rem; padding: 0.2rem; border: 1px solid #ddd; border-radius: 2px;" />
+            </div>
+
+            <!-- Travelers Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>👥</span>
+                    <span>Travelers</span>
+                </div>
+                <div class="hero-search-value" id="hero-travelers">2 Adults</div>
+                <button class="hero-search-clear" id="clear-travelers">&times;</button>
+            </div>
+
+            <!-- Search Button -->
+            <button class="hero-search-btn" id="hero-search-submit">Explore All Parks ></button>
+        </div>
+
+        <!-- Updated CTA button -->
+        <a href="#parks-grid-section" class="cta-btn">View All Parks</a>
+    </div>
+</section>
+
+<!-- All Parks Grid Section -->
+<section id="parks-grid-section" class="container">
+    <h2 class="section-heading">Explore All National Parks</h2>
+
+    <!-- Parks Count -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="parks-count">
+            <span th:text="${remainingParks.size()}">0</span> Additional Parks to Discover
+        </div>
+        <p style="color: #666; margin-top: 1rem;">
+            Showing parks not featured on the homepage
+        </p>
+    </div>
+
+    <div class="parks-grid">
+        <!-- Dynamic Parks from Database (EXCLUDING first 3 from main page) -->
+        <div th:each="park, stat : ${remainingParks}" class="park-card"
+             th:style="${park.imageUrl != null && !park.imageUrl.isEmpty()} ?
+                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(' + ${park.imageUrl} + ')' :
+                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(\'https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80\')'">
+            <div class="park-content">
+                <h3 th:text="${park.parkName}">Park Name</h3>
+                <div class="park-location" th:text="${park.routeName}">Route Name/Location</div>
+                <p th:text="${park.description}">Park description will appear here...</p>
+
+                <!-- Features -->
+                <div class="park-features">
+                    <span class="park-feature" th:text="${park.visitTime}">Visit Time</span>
+                    <span class="park-feature" th:text="${park.animalNumber}">Animal Info</span>
+                    <span th:if="${park.showPrice}" class="park-feature">
+        Price: $<span th:text="${#numbers.formatDecimal(park.price, 1, 2)}">0.00</span>
+    </span>
+                    <span class="park-feature" th:text="${park.status}">Available</span>
+                </div>
+
+                <a th:href="@{/#contact}" class="cta-btn">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Fallback message if no additional parks -->
+        <div th:if="${#lists.isEmpty(remainingParks)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <h3 style="color: #0a4d2b; margin-bottom: 1rem;">All Parks Currently Featured</h3>
+            <p style="color: #666; margin-bottom: 2rem;">
+                All our national parks are currently featured on the homepage.
+                Check back soon for new park additions!
+            </p>
+            <a th:href="@{/}" class="nav-button">← Return to Homepage</a>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div style="text-align: center; margin-top: 4rem;">
+        <a th:href="@{/parks/user}" class="nav-button">← Return to Homepage</a>
+    </div>
+</section>
+
+<!-- Footer - Same as main page -->
+<footer>
+    <ul class="footer-links">
+        <li><a th:href="@{/parks/all}">All National Parks</a></li>
+        <li><a href="#routes">Routes</a></li>
+        <li><a href="#epic-adventures">Epic Adventures</a></li>
+        <li><a href="#popular-trips">Popular Trips</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+    </ul>
+    <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
+</footer>
+
+<!-- JavaScript - Same as main page -->
+<script>
+    // 1. Hero Image Slideshow
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index % slides.length].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlide++;
+        showSlide(currentSlide);
+    }
+
+    setInterval(nextSlide, 3000);
+
+    // 2. Search button functionality
+    const searchBtn = document.getElementById('search-btn');
+    const searchInput = document.getElementById('search-input');
+
+    searchBtn.addEventListener('click', () => {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            alert(`Searching for: "${searchTerm}" in all national parks`);
+            searchInput.value = '';
+        } else {
+            alert('Please enter a search term!');
+        }
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
+
+    // 3. Hero Search Bar Functionality
+    const heroWhereTo = document.getElementById('hero-where-to');
+    const heroStartDate = document.getElementById('hero-start-date');
+    const heroTravelers = document.getElementById('hero-travelers');
+    const heroDateInput = document.getElementById('hero-date-input');
+    const clearWhereTo = document.getElementById('clear-where-to');
+    const clearTravelers = document.getElementById('clear-travelers');
+    const heroSearchSubmit = document.getElementById('hero-search-submit');
+
+    heroStartDate.addEventListener('click', () => {
+        heroDateInput.style.display = 'block';
+        heroStartDate.style.display = 'none';
+    });
+
+    heroDateInput.addEventListener('change', () => {
+        if (heroDateInput.value) {
+            heroStartDate.textContent = heroDateInput.value;
+            heroStartDate.style.display = 'block';
+            heroDateInput.style.display = 'none';
+        }
+    });
+
+    clearWhereTo.addEventListener('click', () => {
+        heroWhereTo.textContent = '';
+    });
+
+    clearTravelers.addEventListener('click', () => {
+        heroTravelers.textContent = '';
+    });
+
+    heroSearchSubmit.addEventListener('click', () => {
+        const whereTo = heroWhereTo.textContent.trim() || 'Not selected';
+        const startDate = heroStartDate.textContent.trim() === 'Select Date' ? 'Not selected' : heroStartDate.textContent;
+        const travelers = heroTravelers.textContent.trim() || 'Not selected';
+
+        alert(`Search Request:\nDestination: ${whereTo}\nStart Date: ${startDate}\nTravelers: ${travelers}\n\nSearching all parks for you!`);
+    });
+
+    // 4. Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // 5. Sticky header enhancement
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+            header.style.backgroundColor = '#083b21';
+        } else {
+            header.style.backgroundColor = '#0a4d2b';
+        }
+    });
+</script>
+</body>
+</html>

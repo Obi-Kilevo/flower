@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>National Park Adventure Bookings</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: #0a4d2b; /* Forest green for national park theme */
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #a8e6cf;
+        }
+
+        /* Search Bar */
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            width: 300px;
+        }
+
+        #search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        #search-btn {
+            background: #ff8c00; /* Sunset orange for CTAs */
+            color: white;
+            border: none;
+            padding: 0 1.2rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        #search-btn:hover {
+            background: #e07b00;
+        }
+
+        /* Hero Section with Slideshow */
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Hero Search Bar (new added style) */
+        .hero-search-bar {
+            display: flex;
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .hero-search-field {
+            flex: 1;
+            padding: 1rem;
+            border-right: 1px solid #eee;
+        }
+
+        .hero-search-field:last-child {
+            border-right: none;
+        }
+
+        .hero-search-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0a4d2b;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .hero-search-value {
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        .hero-search-clear {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .hero-search-btn {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            padding: 0 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .hero-search-btn:hover {
+            background: #e07b00;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: #ff8c00;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            background: #e07b00;
+        }
+
+        /* Section Common Styles */
+        section {
+            scroll-margin-top: 80px; /* For smooth scroll with sticky header */
+        }
+
+        .section-heading {
+            color: #0a4d2b;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        /* Company Info Section */
+        .company-info {
+            margin-bottom: 6rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-card-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .info-card-content {
+            padding: 1.8rem;
+            flex: 1;
+        }
+
+        .info-card h3 {
+            color: #0a4d2b;
+            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .info-card li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .info-card li::before {
+            content: "✓";
+            color: #ff8c00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* National Parks Section (Expanded) - 修改后的样式 */
+        .parks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .park-card {
+            /* 关键修改：将卡片改为相对定位，移除原有背景色 */
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            /* 确保卡片有最小高度 */
+            min-height: 500px;
+        }
+
+        .park-card::before {
+            /* 使用伪元素作为背景图片容器 */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* 为每个公园卡片设置对应的背景图片 */
+        .park-card:nth-child(1)::before {
+            background-image: url('https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        }
+
+        .park-card:nth-child(2)::before {
+            background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        }
+
+        .park-card:nth-child(3)::before {
+            background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        }
+
+        .park-card:nth-child(4)::before {
+            background-image: url('https://images.unsplash.com/photo-1513309914637-682d25faa06e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+        }
+
+        /* 添加半透明叠加层，确保文字清晰可读 */
+        .park-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+            z-index: 2;
+        }
+
+        .park-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 移除原有图片元素的显示 */
+        .park-img {
+            display: none;
+        }
+
+        .park-content {
+            /* 关键修改：内容层叠在背景之上 */
+            position: relative;
+            z-index: 3;
+            padding: 2rem;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .park-content h3 {
+            color: white; /* 修改标题颜色为白色 */
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .park-location {
+            color: #f8f9fa; /* 修改位置文字颜色 */
+            font-style: italic;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .park-location::before {
+            content: "📍";
+        }
+
+        .park-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .park-feature {
+            background: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+            color: white; /* 修改特性标签文字颜色 */
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .park-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+        }
+
+        /* Routes Section */
+        .routes-section {
+            background: #f1f8f4;
+            padding: 4rem 5%;
+            margin: 6rem 0;
+        }
+
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .route-header {
+            background: #0a4d2b;
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .route-difficulty {
+            background: #ff8c00;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .route-content {
+            padding: 1.8rem;
+        }
+
+        .route-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1.5rem;
+        }
+
+        .route-stat {
+            text-align: center;
+        }
+
+        .route-stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0a4d2b;
+            margin-bottom: 0.3rem;
+        }
+
+        .route-stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .route-highlights {
+            margin: 1.5rem 0;
+        }
+
+        .route-highlights h4 {
+            color: #0a4d2b;
+            margin-bottom: 1rem;
+        }
+
+        .route-highlights ul {
+            list-style-position: inside;
+            padding-left: 0.5rem;
+        }
+
+        .route-highlights li {
+            margin-bottom: 0.8rem;
+        }
+
+        .route-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            padding: 0.8rem;
+        }
+
+        /* Epic Adventures Section */
+        .adventures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .adventure-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .adventure-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .adventure-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .adventure-content {
+            padding: 1.8rem;
+        }
+
+        .adventure-type {
+            background: #ff8c00;
+            color: white;
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .adventure-content h3 {
+            color: #0a4d2b;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .adventure-duration {
+            color: #666;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .adventure-duration::before {
+            content: "⏱️";
+        }
+
+        .adventure-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0a4d2b;
+            margin: 1.5rem 0;
+        }
+
+        .adventure-price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #666;
+        }
+
+        .adventure-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            padding: 0.8rem;
+        }
+
+        /* Popular Trips Section */
+        .popular-trips {
+            margin-bottom: 6rem;
+        }
+
+        .trips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .trip-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .trip-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ff8c00;
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .trip-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .trip-content {
+            padding: 1.8rem;
+        }
+
+        .trip-content h3 {
+            color: #0a4d2b;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .trip-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ff8c00;
+            margin-bottom: 1rem;
+        }
+
+        .trip-rating span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .trip-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+        }
+
+        /* Communication/Contact Section */
+        .communication {
+            max-width: 1400px;
+            margin: 4rem auto 6rem;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .contact-item h3 {
+            color: #0a4d2b;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item p {
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a4d2b;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            /* Responsive for hero search bar */
+            .hero-search-bar {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            .hero-search-field {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+
+            .hero-search-field:last-child {
+                border-bottom: none;
+            }
+
+            .hero-search-btn {
+                padding: 1rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .section-heading {
+                font-size: 1.8rem;
+            }
+
+            .parks-grid, .adventures-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .route-stats {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            /* 响应式调整公园卡片高度 */
+            .park-card {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header with Navigation & Search -->
+<header>
+    <div class="header-container">
+        <div class="logo">BigPanda Safaris</div>
+
+        <!-- Main Navigation (Updated - removed Booking link) -->
+        <nav>
+            <ul>
+                <li><a href="#national-parks">National Parks</a></li>
+                <li><a href="#routes">Routes</a></li>
+                <li><a href="#epic-adventures">Epic Adventures</a></li>
+                <li><a href="#popular-trips">Popular Trips</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Search Bar with Button -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search parks, adventures...">
+            <button id="search-btn">Search</button>
+        </div>
+    </div>
+</header>
+
+<!-- Hero Section with Image Slideshow (modified with new search bar) -->
+<section class="hero">
+    <div class="hero-slides">
+        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Explore Tanzania's National Parks</h1>
+
+        <!-- New Hero Search Bar (replaces the original paragraph) -->
+        <div class="hero-search-bar">
+            <!-- Where To Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>📍</span>
+                    <span>Where To</span>
+                </div>
+                <div class="hero-search-value" id="hero-where-to">Tanzania</div>
+                <button class="hero-search-clear" id="clear-where-to">&times;</button>
+            </div>
+
+            <!-- Start Date Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>📅</span>
+                    <span>Start Date</span>
+                </div>
+                <div class="hero-search-value" id="hero-start-date">Select Date</div>
+                <input type="date" id="hero-date-input" style="display: none; width: 100%; margin-top: 0.3rem; padding: 0.2rem; border: 1px solid #ddd; border-radius: 2px;" />
+            </div>
+
+            <!-- Travelers Field -->
+            <div class="hero-search-field">
+                <div class="hero-search-label">
+                    <span>👥</span>
+                    <span>Travelers</span>
+                </div>
+                <div class="hero-search-value" id="hero-travelers">2 Adults</div>
+                <button class="hero-search-clear" id="clear-travelers">&times;</button>
+            </div>
+
+            <!-- Search Button -->
+            <button class="hero-search-btn" id="hero-search-submit">Show 8,827 Tours ></button>
+        </div>
+
+        <!-- Updated CTA button to point to national parks instead of booking -->
+        <a href="#national-parks" class="cta-btn">Explore Parks</a>
+    </div>
+</section>
+
+<!-- Company Info Section -->
+<section class="company-info container">
+    <h2 class="section-heading">Why Choose ParkAdventure?</h2>
+    <div class="info-grid">
+        <!-- Mission & Core Services -->
+        <div class="info-card">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Our Mission" class="info-card-img">
+            <div class="info-card-content">
+                <h3>Our Mission & Services</h3>
+                <ul>
+                    <li>Provide seamless, unforgettable national park adventures for all travelers</li>
+                    <li>Curate safe, guided experiences tailored to your preferences</li>
+                    <li>Support sustainable tourism practices in national parks</li>
+                    <li>24/7 on-ground support during your adventure</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Free Perks -->
+        <div class="info-card">
+            <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Free Perks" class="info-card-img">
+            <div class="info-card-content">
+                <h3>Exclusive Free Perks</h3>
+                <ul>
+                    <li>Complimentary airport pickup for all booked adventures</li>
+                    <li>Free meals on your first day of the adventure</li>
+                    <li>Complimentary park map & guidebook</li>
+                    <li>Free entry to park visitor centers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Currency Exchange -->
+        <div class="info-card">
+            <img src="https://images.unsplash.com/photo-1541328065977-01a91b9ba2f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Currency Exchange" class="info-card-img">
+            <div class="info-card-content">
+                <h3>Flexible Currency & Payments</h3>
+                <ul>
+                    <li>Currency exchange at competitive rates</li>
+                    <li>Supported currencies: CNY (Yuan), Tsh (Tanzanian Shilling), USD (Dollars)</li>
+                    <li>Instant online payments available</li>
+                    <li>Cash payments accepted at all our offices</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<!-- National Parks Section (Limited to 3) -->
+<section id="national-parks" class="container">
+    <h2 class="section-heading">Explore Our Famous National Parks</h2>
+    <div class="parks-grid">
+        <!-- Dynamic Parks from Database (Limited to 3) -->
+        <div th:each="park, stat : ${parks}" class="park-card">
+            <!-- Dynamic Background Images (cycle through 4 images) -->
+            <div class="park-content">
+                <h3 th:text="${park.parkName}">Park Name</h3>
+                <div class="park-location" th:text="${park.routeName}">Route Name/Location</div>
+                <p th:text="${park.description}">Park description will appear here...</p>
+
+                <!-- Features (you can customize these based on your data) -->
+                <div class="park-features">
+                    <span class="park-feature" th:text="${park.visitTime}">Visit Time</span>
+                    <span class="park-feature" th:text="${park.animalNumber}">Animal Info</span>
+                    <span th:if="${park.showPrice}" class="park-feature">
+        Price: $<span th:text="${#numbers.formatDecimal(park.price, 1, 2)}">0.00</span>
+    </span>
+                    <span class="park-feature" th:text="${park.status}">Available</span>
+                </div>
+
+
+                <a href="#contact" class="cta-btn">Learn More</a>
+            </div>
+        </div>
+
+        <!-- Fallback message if no parks -->
+        <div th:if="${#lists.isEmpty(parks)}" style="text-align: center; padding: 40px;">
+            <p>No national parks available at the moment. Check back soon!</p>
+        </div>
+    </div>
+
+    <!-- "View More" Button -->
+    <div th:if="${parks.size() > 0}" style="text-align: center; margin-top: 3rem;">
+        <a th:href="@{/parks/all}" class="cta-btn">View All National Parks →</a>
+    </div>
+</section>
+
+
+
+
+<!-- Routes Section (Dynamic from Database) -->
+<section id="routes" class="routes-section">
+    <div class="container">
+        <h2 class="section-heading">Featured Adventure Routes</h2>
+        <div class="routes-grid">
+            <!-- Dynamic Routes from Database (Limited to 3) -->
+            <div th:each="route, stat : ${routes}" class="route-card">
+                <div class="route-header">
+                    <h3 th:text="${route.routeName} ?: 'Unnamed Route'">Route Name</h3>
+                    <span class="route-difficulty" th:text="${route.status} ?: 'available'">Status</span>
+                </div>
+
+                <!-- Image Container with Price Badge -->
+                <div class="route-image-container" style="position: relative;">
+                    <th:block th:if="${route.imageUrl != null and route.imageUrl != ''}">
+                        <img th:src="${route.imageUrl}"
+                             th:alt="${route.routeName}"
+                             style="width:100%; height:250px; object-fit:cover;"
+                             onerror="handleImageError(this)" />
+                    </th:block>
+
+                    <th:block th:unless="${route.imageUrl != null and route.imageUrl != ''}">
+                        <div style="width:100%;height:250px;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;background:#f5f5f5;">
+                            <div>
+                                <i style="font-size:3rem;">🏞️</i><br>
+                                Image Not Provided
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${route.showPrice != null and route.showPrice and route.price != null}">
+                        <div style="position: absolute; bottom: 15px; left: 15px; background: rgba(10, 77, 43, 0.9); color: white; padding: 8px 16px; border-radius: 6px; font-weight: 600; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
+                            $<span th:text="${#numbers.formatDecimal(route.price, 1, 2)}">0.00</span> <span style="font-size:0.85em; opacity:0.9;">pp (USD)</span>
+                        </div>
+                    </th:block>
+                </div>
+
+                <div class="route-stats">
+                    <div class="route-stat">
+                        <div class="route-stat-value" th:text="${route.parkName} ?: 'National Park'">
+                            Park
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="route-content">
+                    <p th:text="${route.description} ?: 'Explore this amazing route through beautiful landscapes and scenic views.'">
+                        Route description will appear here...
+                    </p>
+
+
+
+
+                    <div class="route-highlights">
+                        <h4>Route Details</h4>
+                        <ul>
+                            <!-- Adventure Type -->
+                            <li th:if="${route.descAdventureType != null and route.descAdventureType != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">⭐</span>
+                                <span th:text="${route.descAdventureType}">Adventure Type</span>
+                            </li>
+
+                            <!-- Duration -->
+                            <li th:if="${route.descDuration != null and route.descDuration != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">⏱️</span>
+                                <span th:text="${route.descDuration}">Duration</span>
+                            </li>
+
+                            <!-- Meals -->
+                            <li th:if="${route.descMeals != null and route.descMeals != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">🍽️</span>
+                                <span th:text="${route.descMeals}">Meals</span>
+                            </li>
+
+                            <!-- Accommodation -->
+                            <li th:if="${route.descAccommodation != null and route.descAccommodation != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">🏨</span>
+                                <span th:text="${route.descAccommodation}">Accommodation</span>
+                            </li>
+
+                            <!-- Activities -->
+                            <li th:if="${route.descActivities != null and route.descActivities != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">🚶‍♂️</span>
+                                <span th:text="${route.descActivities}">Activities</span>
+                            </li>
+
+                            <!-- Transport -->
+                            <li th:if="${route.descTransport != null and route.descTransport != ''}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">🚗</span>
+                                <span th:text="${route.descTransport}">Transport</span>
+                            </li>
+
+                            <!-- Price (Optional - only if showPrice is true and price exists) -->
+                            <li th:if="${route.showPrice != null and route.showPrice and route.price != null}"
+                                style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">💰</span>
+                                $<span th:text="${#numbers.formatDecimal(route.price, 1, 2)}">0.00</span> pp (USD)
+                            </li>
+
+                            <!-- Status (Always show) -->
+                            <li style="margin-bottom: 8px; padding-left: 20px; position: relative;">
+                                <span style="position: absolute; left: 0; color: #ff8c00;">📊</span>
+                                <span th:text="${route.status} ?: 'available'">Available</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="#contact" class="cta-btn">Learn About This Route</a>
+                </div>
+            </div>
+
+
+
+
+
+            <div th:if="${#lists.isEmpty(routes)}" style="text-align: center; padding: 40px;">
+                <p>No adventure routes available at the moment. Check back soon!</p>
+            </div>
+        </div>
+
+        <!-- "View All Routes" Button -->
+        <div th:if="${routes.size() > 0}" style="text-align: center; margin-top: 3rem;">
+            <a th:href="@{/parks/routes/all}" class="cta-btn" style="background: #0a4d2b;">
+                View All Adventure Routes →
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<!--&lt;!&ndash; Epic Adventures Section (Expanded Dedicated Page) &ndash;&gt;-->
+<!--<section id="epic-adventures" class="container">-->
+<!--    <h2 class="section-heading">Our Epic Luxury Hotels</h2>-->
+<!--    <div class="adventures-grid">-->
+<!--        &lt;!&ndash; Wildlife Safari &ndash;&gt;-->
+<!--        <div class="adventure-card">-->
+<!--            <img src="https://images.unsplash.com/photo-1571997791555-715a1da38901?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Wildlife Safari" class="adventure-img">-->
+<!--            <div class="adventure-content">-->
+<!--                <span class="adventure-type">WILDLIFE</span>-->
+<!--                <h3>Yellowstone Wildlife Safari</h3>-->
+<!--                <div class="adventure-duration">Full Day (8 Hours)</div>-->
+<!--                <p>Guided safari through Yellowstone National Park to spot the park's iconic wildlife including bison, elk, wolves, and bears with expert naturalists.</p>-->
+<!--                <div class="adventure-price">$199 <span>per person</span></div>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Adventure</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Rock Climbing &ndash;&gt;-->
+<!--        <div class="adventure-card">-->
+<!--            <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Rock Climbing" class="adventure-img">-->
+<!--            <div class="adventure-content">-->
+<!--                <span class="adventure-type">ADVENTURE</span>-->
+<!--                <h3>Yosemite Rock Climbing</h3>-->
+<!--                <div class="adventure-duration">Half Day (4 Hours)</div>-->
+<!--                <p>Guided rock climbing experience for all skill levels in Yosemite Valley, with all equipment provided and expert instruction.</p>-->
+<!--                <div class="adventure-price">$149 <span>per person</span></div>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Adventure</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Rafting Trip &ndash;&gt;-->
+<!--        <div class="adventure-card">-->
+<!--            <img src="https://images.unsplash.com/photo-1564234244858-0ab85218ef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Rafting Trip" class="adventure-img">-->
+<!--            <div class="adventure-content">-->
+<!--                <span class="adventure-type">WATER SPORT</span>-->
+<!--                <h3>Grand Canyon Rafting</h3>-->
+<!--                <div class="adventure-duration">Full Day (7 Hours)</div>-->
+<!--                <p>Thrilling rafting adventure down the Colorado River through the Grand Canyon with professional guides and safety equipment.</p>-->
+<!--                <div class="adventure-price">$249 <span>per person</span></div>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Adventure</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Photography Tour &ndash;&gt;-->
+<!--        <div class="adventure-card">-->
+<!--            <img src="https://images.unsplash.com/photo-1519689680025-144576512865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Photography Tour" class="adventure-img">-->
+<!--            <div class="adventure-content">-->
+<!--                <span class="adventure-type">TOUR</span>-->
+<!--                <h3>Zion Photography Tour</h3>-->
+<!--                <div class="adventure-duration">Sunrise/Sunset (3 Hours)</div>-->
+<!--                <p>Guided photography tour to the best spots in Zion National Park during golden hour, with tips from professional landscape photographers.</p>-->
+<!--                <div class="adventure-price">$129 <span>per person</span></div>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Adventure</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+
+<!-- Epic Adventures Section (Dynamic from Database) -->
+<section id="epic-adventures" class="container">
+    <h2 class="section-heading">Our Epic Luxury Hotels</h2>
+    <div class="adventures-grid">
+        <!-- Dynamic Hotels from Database -->
+        <div th:each="hotel : ${hotels}" class="adventure-card">
+            <th:block th:if="${hotel.imageUrl != null and !hotel.imageUrl.isEmpty()}">
+                <img th:src="${hotel.imageUrl}"
+                     th:alt="${hotel.name}"
+                     class="adventure-img">
+            </th:block>
+            <th:block th:unless="${hotel.imageUrl != null and !hotel.imageUrl.isEmpty()}">
+                <div class="adventure-img" style="background: #f1f1f1; display: flex; align-items: center; justify-content: center; color: #999; font-size: 3rem;">
+                    🏨
+                </div>
+            </th:block>
+
+            <div class="adventure-content">
+                <span class="adventure-type" th:text="${hotel.country ?: 'LUXURY'}">LUXURY</span>
+                <h3 th:text="${hotel.name}">Hotel Name</h3>
+                <div class="adventure-duration" th:text="${hotel.city ?: 'City'}">City, Country</div>
+
+                <!-- FEATURES DISPLAY -->
+                <div th:if="${hotel.features != null and !hotel.features.isEmpty()}"
+                     style="margin: 10px 0; color: #555; font-size: 0.9em;">
+                    <div style="font-weight: 600; margin-bottom: 3px;">Features:</div>
+                    <div style="max-height: 45px; overflow: hidden; line-height: 1.4;">
+                        <span th:text="${hotel.features}"></span>
+                    </div>
+                </div>
+
+                <!-- Show price -->
+                <th:block th:if="${hotel.price != null}">
+                    <div class="adventure-price">
+                        <span th:text="${hotel.currency ?: 'USD'}"></span>
+                        <span th:text="${#numbers.formatDecimal(hotel.price, 1, 2)}">0.00</span>
+                        <span>per night</span>
+                    </div>
+                </th:block>
+
+                <!-- Show contact for pricing when no price -->
+                <th:block th:if="${hotel.price == null}">
+                    <div class="adventure-price" style="color: #666; font-style: italic;">
+                        Contact for pricing
+                    </div>
+                </th:block>
+
+                <a href="#contact" class="cta-btn">Book Now</a>
+            </div>
+        </div>
+
+        <!-- Fallback if no hotels -->
+        <div th:if="${#lists.isEmpty(hotels)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <p>No luxury hotels available at the moment. Check back soon!</p>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+<!--&lt;!&ndash; Popular Camps Section (Expanded Dedicated Page) &ndash;&gt;-->
+<!--<section id="popular-trips" class="popular-trips container">-->
+<!--    <h2 class="section-heading">Our Most Popular Trips</h2>-->
+<!--    <div class="trips-grid">-->
+<!--        &lt;!&ndash; Trip 1 &ndash;&gt;-->
+<!--        <div class="trip-card">-->
+<!--            <span class="trip-badge">TOP SELLER</span>-->
+<!--            <img src="https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Yellowstone 3-Day Adventure" class="trip-img">-->
+<!--            <div class="trip-content">-->
+<!--                <h3>Yellowstone 3-Day Adventure</h3>-->
+<!--                <div class="trip-rating">-->
+<!--                    ★★★★★ <span>(245 reviews)</span>-->
+<!--                </div>-->
+<!--                <p>Complete Yellowstone experience with guided hikes, wildlife viewing, and overnight stays in historic lodges.</p>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Trip</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Trip 2 &ndash;&gt;-->
+<!--        <div class="trip-card">-->
+<!--            <span class="trip-badge">BEST VALUE</span>-->
+<!--            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Yosemite Weekend Getaway" class="trip-img">-->
+<!--            <div class="trip-content">-->
+<!--                <h3>Yosemite Weekend Getaway</h3>-->
+<!--                <div class="trip-rating">-->
+<!--                    ★★★★☆ <span>(189 reviews)</span>-->
+<!--                </div>-->
+<!--                <p>Perfect weekend escape to Yosemite with easy hikes, scenic drives, and comfortable accommodations.</p>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Trip</a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Trip 3 &ndash;&gt;-->
+<!--        <div class="trip-card">-->
+<!--            <span class="trip-badge">NEW</span>-->
+<!--            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="Grand Canyon & Zion Combo" class="trip-img">-->
+<!--            <div class="trip-content">-->
+<!--                <h3>Grand Canyon & Zion Combo</h3>-->
+<!--                <div class="trip-rating">-->
+<!--                    ★★★★★ <span>(127 reviews)</span>-->
+<!--                </div>-->
+<!--                <p>5-day adventure exploring two of Utah and Arizona's most spectacular national parks.</p>-->
+<!--                &lt;!&ndash; Updated button text and link &ndash;&gt;-->
+<!--                <a href="#contact" class="cta-btn">Inquire About This Trip</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
+
+
+<!-- Popular Camps Section (Dynamic from Database) -->
+<section id="popular-trips" class="popular-trips container">
+    <h2 class="section-heading">Our Popular Camps</h2>
+    <div class="trips-grid">
+        <!-- Dynamic Camps from Database -->
+        <div th:each="camp : ${camps}" class="trip-card">
+            <!-- TOP SELLER badge for first camp -->
+            <span th:if="${campStat.first}" class="trip-badge">TOP SELLER</span>
+
+            <!-- Camp Image -->
+            <th:block th:if="${camp.imageUrl != null and !camp.imageUrl.isEmpty()}">
+                <img th:src="${camp.imageUrl}"
+                     th:alt="${camp.name}"
+                     class="trip-img">
+            </th:block>
+            <th:block th:unless="${camp.imageUrl != null and !camp.imageUrl.isEmpty()}">
+                <div class="trip-img" style="background: #f1f1f1; display: flex; align-items: center; justify-content: center; color: #999; font-size: 3rem;">
+                    ⛺
+                </div>
+            </th:block>
+
+            <div class="trip-content">
+                <h3 th:text="${camp.name}">Camp Name</h3>
+                <div class="trip-rating">
+                    ★★★★★ <span>(Reviews)</span>
+                </div>
+
+                <!-- Location -->
+                <p style="margin-bottom: 10px;">
+                    <span th:text="${camp.city} ?: ''"></span>
+                    <span th:if="${camp.city and camp.country}">, </span>
+                    <span th:text="${camp.country} ?: ''"></span>
+                </p>
+
+                <!-- Price or Contact -->
+                <p style="margin: 10px 0;">
+                    <span th:if="${camp.price != null}">
+                        <strong>From </strong>
+                        <span th:text="${camp.currency ?: 'USD'}"></span>
+                        <span th:text="${#numbers.formatDecimal(camp.price, 1, 2)}">0.00</span> per night
+                    </span>
+                    <span th:if="${camp.price == null}" class="text-muted">
+                        Contact for pricing
+                    </span>
+                </p>
+
+                <!-- Features preview -->
+                <div th:if="${camp.features != null and !camp.features.isEmpty()}"
+                     style="font-size: 0.9em; color: #666; margin: 10px 0;">
+                    <div style="max-height: 40px; overflow: hidden; line-height: 1.4;">
+                        <span th:text="${camp.features}"></span>
+                    </div>
+                </div>
+
+                <a href="#contact" class="cta-btn">Book This Camp</a>
+            </div>
+        </div>
+
+        <!-- Fallback if no camps -->
+        <div th:if="${#lists.isEmpty(camps)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <p>No camps available at the moment. Check back soon!</p>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<!-- Communication/Contact Section -->
+<section class="communication" id="contact">
+    <h2 class="section-heading">Get In Touch With Us</h2>
+    <div class="contact-grid">
+        <div class="contact-item">
+            <h3>Customer Support</h3>
+            <p>Phone: +1 (800) 123-4567</p>
+            <p>Email: support@parkadventure.com</p>
+            <p>Hours: 8AM - 8PM EST</p>
+        </div>
+
+        <div class="contact-item">
+            <h3>Group Bookings</h3>
+            <p>Phone: +1 (800) 987-6543</p>
+            <p>Email: groups@parkadventure.com</p>
+            <p>Minimum 10 guests</p>
+        </div>
+
+        <div class="contact-item">
+            <h3>Feedback & Suggestions</h3>
+            <p>Email: feedback@parkadventure.com</p>
+            <p>We value your input!</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <ul class="footer-links">
+        <!-- Removed Booking link -->
+        <li><a href="#national-parks">National Parks</a></li>
+        <li><a href="#routes">Routes</a></li>
+        <li><a href="#epic-adventures">Epic Adventures</a></li>
+        <li><a href="#popular-trips">Popular Trips</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+    </ul>
+    <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
+</footer>
+
+
+
+
+<script>
+    // Image error handler function
+    function handleImageError(img) {
+        img.onerror = null;
+        img.style.display = 'none';
+
+        const container = img.parentElement;
+        const priceBadge = container.querySelector('[style*="position: absolute; bottom: 15px; left: 15px"]');
+
+        // Create error container
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = 'width:100%;height:250px;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;flex-direction:column;background-color:#f8f9fa;position:relative;';
+        errorDiv.innerHTML = `
+            <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
+            <div style="margin-bottom:5px;">Image Not Found</div>
+            <small style="margin-top:10px;word-break:break-all;max-width:100%;padding:0 10px;color:#666;">
+                ${img.getAttribute('src') ? 'URL: ' + img.getAttribute('src') : 'No image URL'}
+            </small>
+        `;
+
+        // Replace the image with error div but keep the price badge
+        if (priceBadge) {
+            // Get all children except the price badge
+            const children = Array.from(container.children);
+            children.forEach(child => {
+                if (child !== priceBadge) {
+                    container.removeChild(child);
+                }
+            });
+            // Insert error div before price badge
+            container.insertBefore(errorDiv, priceBadge);
+        } else {
+            container.innerHTML = '';
+            container.appendChild(errorDiv);
+        }
+    }
+</script>
+<!-- JavaScript for Slideshow, Search & Hero Search Bar -->
+<script>
+    // 1. Hero Image Slideshow (changes every 3 seconds)
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        // Hide all slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        // Show the selected slide (loop back to 0 if index exceeds slides length)
+        slides[index % slides.length].classList.add('active');
+    }
+
+    function nextSlide() {
+        currentSlide++;
+        showSlide(currentSlide);
+    }
+
+    // Start slideshow (change every 3000ms = 3 seconds)
+    setInterval(nextSlide, 3000);
+
+    // 2. Search button functionality (header search)
+    const searchBtn = document.getElementById('search-btn');
+    const searchInput = document.getElementById('search-input');
+
+    searchBtn.addEventListener('click', () => {
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (searchTerm) {
+            alert(`Searching for: "${searchTerm}" in national parks and adventures`);
+            searchInput.value = ''; // Clear input after search
+        } else {
+            alert('Please enter a search term!');
+        }
+    });
+
+    // Add Enter key support for header search
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
+
+    // 3. Hero Search Bar Functionality (new added)
+    const heroWhereTo = document.getElementById('hero-where-to');
+    const heroStartDate = document.getElementById('hero-start-date');
+    const heroTravelers = document.getElementById('hero-travelers');
+    const heroDateInput = document.getElementById('hero-date-input');
+    const clearWhereTo = document.getElementById('clear-where-to');
+    const clearTravelers = document.getElementById('clear-travelers');
+    const heroSearchSubmit = document.getElementById('hero-search-submit');
+
+    // Show date input when clicking on start date field
+    heroStartDate.addEventListener('click', () => {
+        heroDateInput.style.display = 'block';
+        heroStartDate.style.display = 'none';
+    });
+
+    // Update date display when date is selected
+    heroDateInput.addEventListener('change', () => {
+        if (heroDateInput.value) {
+            heroStartDate.textContent = heroDateInput.value;
+            heroStartDate.style.display = 'block';
+            heroDateInput.style.display = 'none';
+        }
+    });
+
+    // Clear where to field
+    clearWhereTo.addEventListener('click', () => {
+        heroWhereTo.textContent = '';
+    });
+
+    // Clear travelers field
+    clearTravelers.addEventListener('click', () => {
+        heroTravelers.textContent = '';
+    });
+
+    // Hero search submit functionality
+    heroSearchSubmit.addEventListener('click', () => {
+        const whereTo = heroWhereTo.textContent.trim() || 'Not selected';
+        const startDate = heroStartDate.textContent.trim() === 'Select Date' ? 'Not selected' : heroStartDate.textContent;
+        const travelers = heroTravelers.textContent.trim() || 'Not selected';
+
+        alert(`Search Request:\nDestination: ${whereTo}\nStart Date: ${startDate}\nTravelers: ${travelers}\n\nWe're finding the best tours for you!`);
+    });
+
+    // 4. Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Adjust for sticky header
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // 5. Sticky header enhancement
+    window.addEventListener('scroll', () => {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+            header.style.backgroundColor = '#083b21';
+        } else {
+            header.style.backgroundColor = '#0a4d2b';
+        }
+    });
+</script>
+</body>
+</html>
