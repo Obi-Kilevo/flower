@@ -42,6 +42,12 @@ public class NationalParksController {
     @Autowired
     private UfaceRepository  ufaceRepository;
 
+    @Autowired
+    private MountainsRepository  mountainRepository;
+
+    @Autowired
+    private CurrencyRepository  currencyRepository;
+
 
     // =================== JSON API ===================
     @GetMapping("/api")
@@ -137,10 +143,23 @@ public class NationalParksController {
 
 
         List<UfaceEntity> face = ufaceRepository.findAll().stream()
-                .limit(3)
+                .limit(1)
                 .toList();
         model.addAttribute("face", face);  // ✅
 
+
+// Get single mountain or null
+        MountainsEntity mountain = mountainRepository.findAll().stream()
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
+
+
+        // Add after mountain
+        CurrencyEntity currency = currencyRepository.findAll().stream()
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("currency", currency);
 
         return "parks/index";
     }

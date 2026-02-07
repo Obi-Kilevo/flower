@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Exchange | ParkAdventure</title>
+
+    <style>
+        /* Same CSS as before - shortened for brevity */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        header {
+            background: #0a4d2b;
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #a8e6cf;
+        }
+        .search-container {
+            display: flex;
+            gap: 0.5rem;
+            width: 300px;
+        }
+        #search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        #search-btn {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            padding: 0 1.2rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        #search-btn:hover {
+            background: #e07b00;
+        }
+        .hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-slide.active {
+            opacity: 1;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            max-width: 800px;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .cta-btn {
+            background: #ff8c00;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+        .cta-btn:hover {
+            background: #e07b00;
+        }
+        .section-heading {
+            color: #0a4d2b;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+        .currencies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+        .currency-card {
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+        }
+        .currency-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+            z-index: 2;
+        }
+        .currency-card:hover {
+            transform: translateY(-5px);
+        }
+        .currency-content {
+            position: relative;
+            z-index: 3;
+            padding: 2rem;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .currency-content h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        .currency-symbol {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .currency-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .currency-feature {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .currency-card .cta-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+        }
+        footer {
+            background: #0a4d2b;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        .parks-count {
+            background: #ff8c00;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+        .nav-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: #0a4d2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 2rem 0;
+        }
+        .nav-button:hover {
+            background: #083b21;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .search-container {
+                width: 100%;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .section-heading {
+                font-size: 1.8rem;
+            }
+            .currencies-grid {
+                grid-template-columns: 1fr;
+            }
+            .currency-card {
+                min-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">ParkAdventure</div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#national-parks">National Parks</a></li>
+                <li><a th:href="@{/mountain/all}">Mountains</a></li>
+                <li><a href="#epic-adventures">Epic Adventures</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search currencies...">
+            <button id="search-btn">Search</button>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-slides">
+        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1615992174118-9b8e9be025e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Currency Exchange Rates</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+            Check current exchange rates for your travel planning
+        </p>
+        <a href="#currencies-grid-section" class="cta-btn">View All Currencies</a>
+    </div>
+</section>
+
+<section id="currencies-grid-section" class="container">
+    <h2 class="section-heading">Available Currencies</h2>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="parks-count">
+            <span th:text="${currencies.size()}">0</span> Currencies Available
+        </div>
+        <p style="color: #666; margin-top: 1rem;">
+            Showing all currency exchange information
+        </p>
+    </div>
+
+    <div class="currencies-grid">
+        <!-- Dynamic Currencies from Database -->
+        <div th:each="currency : ${currencies}" class="currency-card"
+             th:style="${currency.imageUrl != null && !currency.imageUrl.isEmpty()} ?
+                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(' + ${currency.imageUrl} + ')' :
+                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(\'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80\')'">
+            <div class="currency-content">
+                <div class="currency-symbol" th:text="${currency.symbol} ?: '$'">$</div>
+                <h3 th:text="${currency.name}">Currency Name</h3>
+                <div class="park-location" th:text="${currency.code}">Currency Code</div>
+                <p th:text="${currency.description} ?: 'Currency exchange information'">Currency description...</p>
+
+                <div class="currency-features">
+                    <span class="currency-feature" th:text="${currency.code}">Code</span>
+                    <span class="currency-feature" th:if="${currency.rate != null}"
+                          th:text="${'Rate: ' + currency.rate}">Exchange Rate</span>
+                    <span class="currency-feature" th:text="${currency.symbol}">Symbol</span>
+                </div>
+
+                <a th:href="@{'/money/admin'}" class="cta-btn">View Details</a>
+            </div>
+        </div>
+
+        <!-- Fallback message if no currencies -->
+        <div th:if="${#lists.isEmpty(currencies)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <h3 style="color: #0a4d2b; margin-bottom: 1rem;">No Currencies Available</h3>
+            <p style="color: #666; margin-bottom: 2rem;">
+                No currency information is currently available.
+                Check back soon for currency exchange rates!
+            </p>
+            <a th:href="@{/}" class="nav-button">← Return to Homepage</a>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div style="text-align: center; margin-top: 4rem;">
+        <a th:href="@{/}" class="nav-button">← Return to Homepage</a>
+    </div>
+</section>
+
+<footer>
+    <ul class="footer-links">
+        <li><a th:href="@{/parks/all}">National Parks</a></li>
+        <li><a th:href="@{/mountain/all}">Mountains</a></li>
+        <li><a th:href="@{/money/all}">Currency Exchange</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
+</footer>
+
+<script>
+    // Hero Image Slideshow
+    const slides = document.querySelectorAll('.hero-slide');
+    let currentSlide = 0;
+    function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index % slides.length].classList.add('active');
+    }
+    function nextSlide() {
+        currentSlide++;
+        showSlide(currentSlide);
+    }
+    setInterval(nextSlide, 3000);
+
+    // Search button functionality
+    document.getElementById('search-btn').addEventListener('click', () => {
+        const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+        if (searchTerm) {
+            alert(`Searching for: "${searchTerm}" in currencies`);
+        } else {
+            alert('Please enter a search term!');
+        }
+    });
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(this.getAttribute('href'));
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

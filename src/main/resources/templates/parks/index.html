@@ -956,10 +956,13 @@
 
 
 
+
+
+<!-- Combined Uface + Mountain + Currency Section -->
 <section id="national-parks" class="container">
-    <h2 class="section-heading">Face Place - National Parks Hub</h2>
+    <h2 class="section-heading">Featured Destinations</h2>
     <div class="parks-grid">
-        <!-- CHANGE: ${parks} → ${face} -->
+        <!-- Uface Box (Box 1) - Always show if data exists -->
         <div th:each="park, stat : ${face}" class="park-card"
              th:style="${park.imageUrl != null && !park.imageUrl.isEmpty()} ?
                       'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(' + ${park.imageUrl} + ')' :
@@ -968,28 +971,67 @@
                 <h3 th:text="${park.parkName}">Park Name</h3>
                 <div class="park-location" th:text="${park.about}">About/Location</div>
                 <p th:text="${park.description}">Park description will appear here...</p>
-
                 <div class="park-features">
                     <span class="park-feature" th:text="${park.visitTime}">Visit Time</span>
                     <span class="park-feature" th:text="${park.animalNumber}">Animal Info</span>
                 </div>
-
                 <a th:href="@{'/three/park/' + ${park.id}}" class="cta-btn">Explore All Parks</a>
-<!--                <a th:href="@{'/parks/park/' + ${park.id}}" class="cta-btn">Explore</a>-->
             </div>
         </div>
 
-        <!-- CHANGE: ${parks} → ${face} -->
-        <div th:if="${#lists.isEmpty(face)}" style="text-align: center; padding: 40px;">
-            <p>No parks available at the moment. Add some in Uface admin.</p>
+        <!-- Mountain Box (Box 2) - Only show if mountain exists -->
+        <div th:if="${mountain != null}" class="park-card"
+             th:style="${mountain.imageUrl != null && !mountain.imageUrl.isEmpty()} ?
+              'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(' + ${mountain.imageUrl} + ')' :
+              'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(\'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80\')'">
+            <div class="park-content">
+                <h3 th:text="${mountain.name}">Mountain Name</h3>
+                <div class="park-location">Mountain Adventure</div>
+                <p th:text="${mountain.features} ?: 'Explore amazing mountain adventures'">Mountain features...</p>
+                <div class="park-features">
+                    <span class="park-feature">Climbing</span>
+                    <span class="park-feature">Hiking</span>
+                </div>
+
+                <!-- ONLY ONE BUTTON: View All Mountains -->
+                <a th:href="@{'/mountain/all'}" class="cta-btn">View All Mountains →</a>
+            </div>
+        </div>
+
+        <!-- Currency Box (Box 3) - Only show if currency exists -->
+        <!-- Currency Box (Box 3) - Only show if currency exists -->
+        <div th:if="${currency != null}" class="park-card"
+             th:style="${currency.imageUrl != null && !currency.imageUrl.isEmpty()} ?
+              'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(' + ${currency.imageUrl} + ')' :
+              'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(\'https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80\')'">
+            <div class="park-content">
+                <h3 th:text="${currency.name}">Currency Name</h3>
+                <div class="park-location" th:text="${currency.code}">Currency Code</div>
+                <p th:text="${currency.description} ?: 'Currency exchange rates and information'">Currency description...</p>
+                <div class="park-features">
+                    <span class="park-feature" th:text="${currency.symbol}">Symbol</span>
+                    <span class="park-feature" th:if="${currency.rate != null}"
+                          th:text="${'Rate: ' + currency.rate}">Exchange Rate</span>
+                </div>
+                <!-- CHANGE THIS LINE: -->
+                <a th:href="@{'/money/all'}" class="cta-btn">View All Currencies →</a>
+            </div>
+        </div>
+        <!-- No data at all -->
+        <div th:if="${#lists.isEmpty(face) && mountain == null && currency == null}"
+             style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <p>No featured destinations configured. Add data in admin panels.</p>
         </div>
     </div>
 
-    <!-- CHANGE: ${parks.size()} → ${face.size()} -->
+    <!-- View All button -->
     <div th:if="${parks.size() > 0}" style="text-align: center; margin-top: 3rem;">
         <a th:href="@{/parks/all}" class="cta-btn">View All National Parks →</a>
     </div>
 </section>
+
+
+
 
 
 

@@ -59,4 +59,11 @@ public class MountainsController {
         }
         return "redirect:/mountain/admin";
     }
+
+
+    @GetMapping("/all")
+    public String allMountains(Model model) {
+        model.addAttribute("mountains", mountainsRepository.findAll());
+        return "mountains/all";
+    }
 }
