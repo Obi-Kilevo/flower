@@ -1,25 +1,13 @@
-# Use Java 17 (recommended for Spring Boot)
-FROM eclipse-temurin:17-jdk-jammy
-
-# Set working directory
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
-
-# Copy Maven wrapper & pom
 COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
-
-# Download dependencies (cache layer)
-RUN ./mvnw dependency:go-offline
-
-# Copy source code
+RUN mvn dependency:go-offline
 COPY src src
+RUN mvn clean package -DskipTests
 
-# Build the app
-RUN ./mvnw clean package -DskipTests
-
-# Expose Spring Boot port
+FROM eclipse-temurin:17-jdk-jammy
+WORKDIR /app
+COPY --from=build /app/target/life-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
 
-# Run the app
-CMD ["java", "-jar", "target/life-0.0.1-SNAPSHOT.jar"]
