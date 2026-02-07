@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Parks List View</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .header {
+            background-color: #0a4d2b;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f3f4;
+        }
+        .badge-available {
+            background-color: #28a745;
+        }
+        .badge-unavailable {
+            background-color: #dc3545;
+        }
+        .id-column {
+            font-weight: bold;
+            color: #0a4d2b;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>📋 Parks List View (Admin)</h1>
+        <p class="mb-0">Quick reference of all parks with IDs for selection</p>
+    </div>
+
+    <!-- Navigation -->
+    <div class="d-flex gap-2 mb-4">
+        <a th:href="@{/parks/admin}" class="btn btn-primary">🏞️ Full Admin Panel</a>
+        <a th:href="@{/parks/admin/list}" class="btn btn-secondary">🔄 Refresh List</a>
+        <a th:href="@{/parks/user}" class="btn btn-outline-primary">👤 User View</a>
+    </div>
+
+    <!-- Parks Table -->
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Total Parks: <span th:text="${#lists.size(parks)}">0</span></h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-dark">
+                    <tr>
+                        <th width="80">ID</th>
+                        <th>Park Name</th>
+                        <th>Route</th>
+                        <th>Status</th>
+                        <th>Price</th>
+                        <th>Best Time</th>
+                        <th>Animals</th>
+                        <th width="150">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="park : ${parks}">
+                        <td class="id-column" th:text="${park.id}">ID</td>
+                        <td>
+                            <strong th:text="${park.parkName}">Name</strong><br>
+                            <small class="text-muted" th:text="${park.description}" th:if="${park.description}">Description</small>
+                        </td>
+                        <td th:text="${park.routeName}">Route</td>
+                        <td>
+                <span th:class="${park.status == 'available'} ? 'badge badge-available' : 'badge badge-unavailable'"
+                      class="badge" th:text="${park.status}">Status</span>
+                        </td>
+                        <td>
+                            <span th:if="${park.showPrice}" th:text="'$' + ${#numbers.formatDecimal(park.price, 1, 2)}">Price</span>
+                            <span th:unless="${park.showPrice}" class="text-muted">Hidden</span>
+                        </td>
+                        <td th:text="${park.visitTime} ?: 'N/A'">Visit Time</td>
+                        <td th:text="${park.animalNumber} ?: 'N/A'">Animals</td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a th:href="@{/parks/admin/edit/{id}(id=${park.id})}" class="btn btn-warning">Edit</a>
+                                <form th:action="@{/parks/admin/toggle/{id}(id=${park.id})}" method="post" style="display:inline;">
+                                    <button type="submit" class="btn btn-outline-secondary"
+                                            th:text="${park.status == 'available'} ? 'Hide' : 'Show'">Toggle</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <small>Use ID column when referencing parks elsewhere in the system.</small>
+        </div>
+    </div>
+
+    <!-- Quick Instructions -->
+    <div class="alert alert-info mt-4">
+        <h5>💡 How to use this list:</h5>
+        <ul class="mb-0">
+            <li>Find the park <strong>ID</strong> in the first column</li>
+            <li>Use this ID to reference the park in other forms or API calls</li>
+            <li>Click <strong>Edit</strong> to modify any park</li>
+            <li>Use <strong>Hide/Show</strong> to quickly change availability</li>
+            <li>Go to <strong>Full Admin Panel</strong> for add/delete functions</li>
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -29,8 +30,11 @@ public class CampEntity {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "price")
-    private Double price;
+//    @Column(name = "price")
+//    private Double price;
+
+    @Column(name = "price", precision = 10, scale = 2)
+    private BigDecimal price;
 
     @Column(name = "currency")
     private String currency = "USD";

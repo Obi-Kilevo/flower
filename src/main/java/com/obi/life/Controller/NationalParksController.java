@@ -1,13 +1,7 @@
 package com.obi.life.Controller;
 
-import com.obi.life.Entity.CampEntity;
-import com.obi.life.Entity.LuxuryHotelsEntity;
-import com.obi.life.Entity.NationalParksEntity;
-import com.obi.life.Entity.RoutesEntity;
-import com.obi.life.Repository.CampRepository;
-import com.obi.life.Repository.LuxuryHotelsRepository;
-import com.obi.life.Repository.NationalParksRepository;
-import com.obi.life.Repository.RoutesRepository;
+import com.obi.life.Entity.*;
+import com.obi.life.Repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +29,19 @@ public class NationalParksController {
 
     @Autowired
     private CampRepository campRepository;
+
+
+
+    @Autowired
+    private LodgesRepository  lodgeRepository;
+
+
+    @Autowired
+    private MountainsRepository  mountainsRepository;
+
+    @Autowired
+    private UfaceRepository  ufaceRepository;
+
 
     // =================== JSON API ===================
     @GetMapping("/api")
@@ -79,6 +86,8 @@ public class NationalParksController {
         return nationalParksRepository.save(park);
     }
 
+
+
     @DeleteMapping("/api/{id}")
     @ResponseBody
     public String deletePark(@PathVariable Long id) {
@@ -91,7 +100,7 @@ public class NationalParksController {
     public String userParks(Model model) {
         List<NationalParksEntity> parks = nationalParksRepository.findAll().stream()
                 .filter(p -> "available".equals(p.getStatus()))
-                .limit(3)
+                .limit(0)
                 .toList();
         model.addAttribute("parks", parks);
 
@@ -103,14 +112,10 @@ public class NationalParksController {
         model.addAttribute("routes", routes);
 
 
-
-
         List<LuxuryHotelsEntity> hotels = luxuryHotelsRepository.findAll().stream()
-                .limit(4)  // Show max 4 hotels
+                .limit(3)  // Show max 4 hotels
                 .toList();
         model.addAttribute("hotels", hotels);
-
-
 
 
         List<CampEntity> camps = campRepository.findAll().stream()
@@ -119,8 +124,57 @@ public class NationalParksController {
         model.addAttribute("camps", camps);
 
 
+        List<LodgesEntity> lodges = lodgeRepository.findAll().stream()
+                .limit(3)  // Show max 3 lodges
+                .toList();
+        model.addAttribute("lodges", lodges);
+
+
+        List<MountainsEntity> mountains = mountainsRepository.findAll().stream()
+                .limit(3)  // Show max 3 mountains
+                .toList();
+        model.addAttribute("mountains", mountains);
+
+
+        List<UfaceEntity> face = ufaceRepository.findAll().stream()
+                .limit(3)
+                .toList();
+        model.addAttribute("face", face);  // ✅
+
+
         return "parks/index";
     }
+
+
+//    @GetMapping("/all")
+//    public String allParks(Model model) {
+//        // Get ALL available parks
+//        List<NationalParksEntity> allParks = nationalParksRepository.findAll().stream()
+//                .filter(p -> "available".equals(p.getStatus()))
+//                .toList();
+//
+//        // Skip 1 park (the one shown on homepage at /user)
+//        List<NationalParksEntity> remainingParks = allParks.stream()
+//                .skip(1)  // Skip the first park (shown on homepage)
+//                .toList();
+//
+//        model.addAttribute("remainingParks", remainingParks);
+//        model.addAttribute("totalParks", allParks.size());
+//        return "parks/all";
+//    }
+
+    @GetMapping("/all")
+    public String allParks(Model model) {
+        // Get ALL available parks
+        List<NationalParksEntity> allParks = nationalParksRepository.findAll().stream()
+                .filter(p -> "available".equals(p.getStatus()))
+                .toList();
+
+        model.addAttribute("remainingParks", allParks);  // ✅ Use ALL parks
+        model.addAttribute("totalParks", allParks.size());
+        return "parks/all";
+    }
+
 
 
 
@@ -135,6 +189,8 @@ public class NationalParksController {
         return "parks/all-routes";  // Create this template
     }
 
+
+
     // In your NationalParksController.java
     @GetMapping("/admin/routes")
     public String adminRoutes(Model model) {
@@ -146,18 +202,8 @@ public class NationalParksController {
     }
 
 
-    @GetMapping("/all")
-    public String allParks(Model model) {
-        List<NationalParksEntity> allParks = nationalParksRepository.findAll().stream()
-                .filter(p -> "available".equals(p.getStatus()))
-                .toList();
-        List<NationalParksEntity> remainingParks = allParks.stream()
-                .skip(3)
-                .toList();
-        model.addAttribute("remainingParks", remainingParks);
-        model.addAttribute("totalParks", allParks.size());
-        return "parks/all";
-    }
+
+
 
     // =================== ADMIN - BOTH PARKS & ROUTES ===================
     @GetMapping("/admin")
@@ -290,8 +336,28 @@ public class NationalParksController {
         return "redirect:/parks/admin";
     }
 
-    @GetMapping
-    public String testdelete() {
-        return "parks/tt";
+
+    // Add this method for separate admin list endpoint
+    @GetMapping("/admin/list")
+    public String adminParkList(Model model) {
+        model.addAttribute("parks", nationalParksRepository.findAll());
+        return "parks/admin-list";
     }
+
+
+
+    @GetMapping("/park/{id}")
+    public String openParkForm(@PathVariable Long id, Model model) {
+        NationalParksEntity park = nationalParksRepository.findById(id).orElse(null);
+        model.addAttribute("park", park);
+
+        // REMOVE the hardcoded return and use database logic:
+        if (park != null && park.getFormPath() != null && !park.getFormPath().isEmpty()) {
+            return park.getFormPath();  // Reads from database
+        }
+
+        return "parks/index";
+    }
+
+
 }

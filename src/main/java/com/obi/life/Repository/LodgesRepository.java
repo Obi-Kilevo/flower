@@ -1,4 +1,8 @@
 package com.obi.life.Repository;
 
-public interface LodgesRepository {
+import com.obi.life.Entity.LodgesEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LodgesRepository extends JpaRepository<LodgesEntity, Long> {
+
 }
