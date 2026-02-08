@@ -31,4 +31,9 @@ public class MountainsEntity {
 
     @Column(name = "image_url")
     private String imageUrl;
+
+
+    @Column(name = "form_path")
+    private String formPath;
+
 }

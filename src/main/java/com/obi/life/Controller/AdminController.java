@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
 
-    @GetMapping
+    @GetMapping("/obi")
     public String adminModel() {
         return "/admin/partOne";
     }

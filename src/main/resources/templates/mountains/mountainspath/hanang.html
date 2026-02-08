@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Mountains | ParkAdventure</title>
 
-    <!-- Use the same CSS as your main page -->
     <style>
         /* Base Styles */
         * {
@@ -62,38 +61,7 @@
             color: #a8e6cf;
         }
 
-        /* Search Bar */
-        .search-container {
-            display: flex;
-            gap: 0.5rem;
-            width: 300px;
-        }
-
-        #search-input {
-            flex: 1;
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 4px 0 0 4px;
-            outline: none;
-            font-size: 0.9rem;
-        }
-
-        #search-btn {
-            background: #ff8c00;
-            color: white;
-            border: none;
-            padding: 0 1.2rem;
-            border-radius: 0 4px 4px 0;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        #search-btn:hover {
-            background: #e07b00;
-        }
-
-        /* Hero Section with Slideshow */
+        /* Hero Section */
         .hero {
             height: 60vh;
             display: flex;
@@ -104,41 +72,9 @@
             padding: 0 5%;
             position: relative;
             overflow: hidden;
-        }
-
-        .hero-slides {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-
-        .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/997443/pexels-photo-997443.jpeg');
             background-size: cover;
             background-position: center;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-
-        .hero-slide.active {
-            opacity: 1;
-        }
-
-        .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2;
         }
 
         .hero-content {
@@ -149,7 +85,7 @@
 
         .hero-content h1 {
             font-size: 3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
         .cta-btn {
@@ -204,17 +140,7 @@
             min-height: 500px;
             background-size: cover;
             background-position: center;
-        }
-
-        .park-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
-            z-index: 2;
+            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url('https://images.pexels.com/photos/997443/pexels-photo-997443.jpeg');
         }
 
         .park-card:hover {
@@ -300,69 +226,11 @@
             text-decoration: underline;
         }
 
-        /* All Parks Page Specific */
-        .all-parks-header {
-            background: linear-gradient(rgba(10, 77, 43, 0.9), rgba(10, 77, 43, 0.8)),
-            url('https://images.unsplash.com/photo-1513326738677-b964603b136d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 6rem 5%;
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .all-parks-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .all-parks-header p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-
-        .parks-count {
-            background: #ff8c00;
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            display: inline-block;
-            margin: 1rem 0;
-        }
-
-        .nav-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: #0a4d2b;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin: 2rem 0;
-        }
-
-        .nav-button:hover {
-            background: #083b21;
-            transform: translateY(-2px);
-        }
-
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
                 gap: 1rem;
-            }
-
-            .search-container {
-                width: 100%;
             }
 
             .hero-content h1 {
@@ -380,14 +248,6 @@
             .park-card {
                 min-height: 450px;
             }
-
-            .all-parks-header h1 {
-                font-size: 2.2rem;
-            }
-
-            .all-parks-header {
-                padding: 4rem 5%;
-            }
         }
 
     </style>
@@ -396,7 +256,7 @@
 <!-- Header -->
 <header>
     <div class="header-container">
-<!--        <div class="logo">ParkAdventure</div>-->
+        <div class="logo">ParkAdventure</div>
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
@@ -410,73 +270,34 @@
     </div>
 </header>
 
-<!-- Hero Section -->
+<!-- Hero Section (no search bar/extra buttons) -->
 <section class="hero">
-    <div class="hero-slides">
-        <div class="hero-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
-        <div class="hero-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517842645767-c639042777db?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');"></div>
-    </div>
-    <div class="hero-overlay"></div>
     <div class="hero-content">
-        <h1>Discover All Mountains</h1>
+        <h1>Hanang Mountain</h1>
     </div>
 </section>
 
 <!-- All Mountains Grid Section -->
 <section id="mountains-grid-section" class="container">
-    <h2 class="section-heading">Explore All Mountains</h2>
+    <h2 class="section-heading">Hello! Obi will place data soon</h2>
 
-    <!-- Mountains Count -->
-    <div style="text-align: center; margin-bottom: 2rem;">
-        <div class="parks-count">
-            <span th:text="${mountains.size()}">0</span> Mountains to Explore
-        </div>
-        <p style="color: #666; margin-top: 1rem;">
-            Showing all available mountain adventures
-        </p>
+    <p style="color: #666; margin-top: 1rem;">
+        tafadhali kuwa mvumilivu
+    </p>
     </div>
 
-    <div class="parks-grid">
-        <!-- Dynamic Mountains from Database -->
-        <div th:each="mountain : ${mountains}" class="park-card"
-             th:style="${mountain.imageUrl != null && !mountain.imageUrl.isEmpty()} ?
-                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(' + ${mountain.imageUrl} + ')' :
-                      'background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url(\'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80\')'">
-            <div class="park-content">
-                <h3 th:text="${mountain.name}">Mountain Name</h3>
-                <div class="park-location">Mountain Adventure</div>
-                <p th:text="${mountain.features} ?: 'Explore amazing mountain adventures'">Mountain features...</p>
-                <div class="park-features">
-                    <span class="park-feature">Climbing</span>
-                    <span class="park-feature">Hiking</span>
-                </div>
-                <a th:href="@{${mountain.formPath != null ? mountain.formPath : '/mountain/all'}}"
-                   class="cta-btn">View Details</a>
-            </div>
-        </div>
 
-        <!-- Fallback message if no mountains -->
-        <div th:if="${#lists.isEmpty(mountains)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
-            <h3 style="color: #0a4d2b; margin-bottom: 1rem;">No Mountains Available</h3>
-            <p style="color: #666; margin-bottom: 2rem;">
-                No mountain adventures are currently available.
-                Check back soon for mountain adventures!
-            </p>
-            <a th:href="@{/}" class="nav-button">← Return to Homepage</a>
-        </div>
-    </div>
 
-    <!-- Back to Home Button -->
     <div style="text-align: center; margin-top: 4rem;">
-        <a th:href="@{/parks/user}" class="nav-button">← Return to Homepage</a>
+        <a href="/mountain/all" class="nav-button" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a4d2b; color: white; text-decoration: none; border-radius: 4px; font-weight: 600; transition: all 0.3s; margin: 2rem 0;">← Return to Homepage</a>
     </div>
 </section>
 
 <!-- Footer -->
 <footer>
     <ul class="footer-links">
-        <li><a th:href="@{/parks/all}">National Parks</a></li>
-        <li><a th:href="@{/mountain/all}">Mountains</a></li>
+        <li><a href="/parks/all">National Parks</a></li>
+        <li><a href="/mountain/all">Mountains</a></li>
         <li><a href="#routes">Routes</a></li>
         <li><a href="#epic-adventures">Epic Adventures</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -484,21 +305,7 @@
     <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
 </footer>
 
-<!-- JavaScript -->
 <script>
-    // Hero Image Slideshow
-    const slides = document.querySelectorAll('.hero-slide');
-    let currentSlide = 0;
-    function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index % slides.length].classList.add('active');
-    }
-    function nextSlide() {
-        currentSlide++;
-        showSlide(currentSlide);
-    }
-    setInterval(nextSlide, 3000);
-
     // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {

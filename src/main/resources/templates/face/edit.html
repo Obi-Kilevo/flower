@@ -264,23 +264,6 @@
             </div>
         `;
     }
-
-    // Form path helper
-    const formPathInput = document.getElementById('formPathInput');
-    formPathInput.addEventListener('input', function() {
-        const value = this.value.toLowerCase().replace(/\s+/g, '-');
-        if (!value.startsWith('parks/parkspath/')) {
-            this.value = 'parks/parkspath/' + value.replace('parks/parkspath/', '');
-        }
-    });
-
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentUrl = imageUrlInput.value;
-        if (currentUrl && currentUrl.trim() !== '') {
-            setTimeout(() => updateImagePreview(currentUrl), 500);
-        }
-    });
 </script>
 </body>
 </html>

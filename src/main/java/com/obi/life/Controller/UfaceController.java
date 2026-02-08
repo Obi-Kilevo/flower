@@ -18,10 +18,33 @@ public class UfaceController {
 
     // =================== ADMIN ONLY ===================
 
+//    @GetMapping("/park/{id}")
+//    public String showAllParksFromFace(@PathVariable Long id, Model model) {
+//        // Redirect to the main controller's "all parks" page
+//        // You can add any logic here if needed
+//        return "redirect:/parks/all";
+//    }
+
     @GetMapping("/park/{id}")
     public String showAllParksFromFace(@PathVariable Long id, Model model) {
-        // Redirect to the main controller's "all parks" page
-        // You can add any logic here if needed
+        // Get the Uface entry from DB
+        Optional<UfaceEntity> faceOpt = ufaceRepository.findById(id);
+        if (faceOpt.isEmpty()) {
+            return "redirect:/parks/all"; // Fallback
+        }
+
+        UfaceEntity face = faceOpt.get();
+        // Use formPath from DB (e.g., /mountain/all for ID=4)
+        String formPath = face.getFormPath();
+        if (formPath != null && !formPath.isEmpty()) {
+            // Ensure path starts with / (absolute)
+            if (!formPath.startsWith("/")) {
+                formPath = "/" + formPath;
+            }
+            return "redirect:" + formPath;
+        }
+
+        // Fallback if no formPath
         return "redirect:/parks/all";
     }
 

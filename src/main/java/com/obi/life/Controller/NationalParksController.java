@@ -143,44 +143,29 @@ public class NationalParksController {
 
 
         List<UfaceEntity> face = ufaceRepository.findAll().stream()
-                .limit(1)
+                .limit(3)
                 .toList();
         model.addAttribute("face", face);  // ✅
 
 
-// Get single mountain or null
-        MountainsEntity mountain = mountainRepository.findAll().stream()
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
-
-
-        // Add after mountain
-        CurrencyEntity currency = currencyRepository.findAll().stream()
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("currency", currency);
+//// Get single mountain or null
+//        MountainsEntity mountain = mountainRepository.findAll().stream()
+//                .findFirst()
+//                .orElse(null);
+//        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
+//
+//
+//        // Add after mountain
+//        CurrencyEntity currency = currencyRepository.findAll().stream()
+//                .findFirst()
+//                .orElse(null);
+//        model.addAttribute("currency", currency);
 
         return "parks/index";
     }
 
 
-//    @GetMapping("/all")
-//    public String allParks(Model model) {
-//        // Get ALL available parks
-//        List<NationalParksEntity> allParks = nationalParksRepository.findAll().stream()
-//                .filter(p -> "available".equals(p.getStatus()))
-//                .toList();
-//
-//        // Skip 1 park (the one shown on homepage at /user)
-//        List<NationalParksEntity> remainingParks = allParks.stream()
-//                .skip(1)  // Skip the first park (shown on homepage)
-//                .toList();
-//
-//        model.addAttribute("remainingParks", remainingParks);
-//        model.addAttribute("totalParks", allParks.size());
-//        return "parks/all";
-//    }
+
 
     @GetMapping("/all")
     public String allParks(Model model) {
@@ -276,6 +261,9 @@ public class NationalParksController {
         park.setVisitTime(updatedPark.getVisitTime());
         park.setAnimalNumber(updatedPark.getAnimalNumber());
         park.setImageUrl(updatedPark.getImageUrl());
+
+        park.setFormPath(updatedPark.getFormPath());  // <-- ADD THIS LINE
+
         nationalParksRepository.save(park);
 
         return "redirect:/parks/admin";
@@ -351,6 +339,7 @@ public class NationalParksController {
         route.setDescActivities(updatedRoute.getDescActivities());
         route.setDescTransport(updatedRoute.getDescTransport());
 
+
         routesRepository.save(route);
         return "redirect:/parks/admin";
     }
@@ -364,19 +353,20 @@ public class NationalParksController {
     }
 
 
+    @GetMapping("/{parkName}")
+    public String parkDetails(@PathVariable String parkName, Model model) {
+        List<NationalParksEntity> allParks = nationalParksRepository.findAll();
 
-    @GetMapping("/park/{id}")
-    public String openParkForm(@PathVariable Long id, Model model) {
-        NationalParksEntity park = nationalParksRepository.findById(id).orElse(null);
-        model.addAttribute("park", park);
+        // Search by matching formPath with parkName (not /parks/ + parkName)
+        Optional<NationalParksEntity> park = allParks.stream()
+                .filter(p -> parkName.equalsIgnoreCase(p.getFormPath()))
+                .findFirst();
 
-        // REMOVE the hardcoded return and use database logic:
-        if (park != null && park.getFormPath() != null && !park.getFormPath().isEmpty()) {
-            return park.getFormPath();  // Reads from database
+        if (park.isPresent()) {
+            model.addAttribute("park", park.get());
+            return "parks/parkspath/" + parkName;
         }
 
-        return "parks/index";
+        return "redirect:/parks/all";
     }
-
-
 }

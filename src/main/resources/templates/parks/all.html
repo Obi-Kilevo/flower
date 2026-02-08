@@ -485,7 +485,7 @@
 <!-- Header - EXACTLY same as main page -->
 <header>
     <div class="header-container">
-        <div class="logo">ParkAdventure</div>
+
 
         <!-- Main Navigation -->
         <nav>
@@ -499,11 +499,6 @@
             </ul>
         </nav>
 
-        <!-- Search Bar with Button -->
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search parks, adventures...">
-            <button id="search-btn">Search</button>
-        </div>
     </div>
 </header>
 
@@ -519,43 +514,10 @@
         <h1>Discover All National Parks</h1>
 
         <!-- Hero Search Bar -->
-        <div class="hero-search-bar">
-            <!-- Where To Field -->
-            <div class="hero-search-field">
-                <div class="hero-search-label">
-                    <span>📍</span>
-                    <span>Where To</span>
-                </div>
-                <div class="hero-search-value" id="hero-where-to">All Parks</div>
-                <button class="hero-search-clear" id="clear-where-to">&times;</button>
-            </div>
 
-            <!-- Start Date Field -->
-            <div class="hero-search-field">
-                <div class="hero-search-label">
-                    <span>📅</span>
-                    <span>Start Date</span>
-                </div>
-                <div class="hero-search-value" id="hero-start-date">Select Date</div>
-                <input type="date" id="hero-date-input" style="display: none; width: 100%; margin-top: 0.3rem; padding: 0.2rem; border: 1px solid #ddd; border-radius: 2px;" />
-            </div>
-
-            <!-- Travelers Field -->
-            <div class="hero-search-field">
-                <div class="hero-search-label">
-                    <span>👥</span>
-                    <span>Travelers</span>
-                </div>
-                <div class="hero-search-value" id="hero-travelers">2 Adults</div>
-                <button class="hero-search-clear" id="clear-travelers">&times;</button>
-            </div>
-
-            <!-- Search Button -->
-            <button class="hero-search-btn" id="hero-search-submit">Explore All Parks ></button>
-        </div>
 
         <!-- Updated CTA button -->
-        <a href="#parks-grid-section" class="cta-btn">View All Parks</a>
+<!--        <a href="#parks-grid-section" class="cta-btn">View All Parks</a>-->
     </div>
 </section>
 
@@ -610,8 +572,9 @@
                     <span class="park-feature" th:text="${park.status}">Available</span>
                 </div>
 
-<!--                <a th:href="@{/#contact}" class="cta-btn">Learn More</a>-->
-                <a th:href="@{'/parks/park/' + ${park.id}}" class="cta-btn">Learn More</a>
+
+<!--                <a th:href="@{'/parks/(parkName)/' + ${park.id}}" class="cta-btn">Learn More</a>-->
+                <a th:href="@{'/parks/' + ${park.formPath}}" class="cta-btn">Learn More</a>
             </div>
         </div>
 
@@ -664,63 +627,9 @@
 
     setInterval(nextSlide, 3000);
 
-    // 2. Search button functionality
-    const searchBtn = document.getElementById('search-btn');
-    const searchInput = document.getElementById('search-input');
 
-    searchBtn.addEventListener('click', () => {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        if (searchTerm) {
-            alert(`Searching for: "${searchTerm}" in all national parks`);
-            searchInput.value = '';
-        } else {
-            alert('Please enter a search term!');
-        }
-    });
 
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            searchBtn.click();
-        }
-    });
 
-    // 3. Hero Search Bar Functionality
-    const heroWhereTo = document.getElementById('hero-where-to');
-    const heroStartDate = document.getElementById('hero-start-date');
-    const heroTravelers = document.getElementById('hero-travelers');
-    const heroDateInput = document.getElementById('hero-date-input');
-    const clearWhereTo = document.getElementById('clear-where-to');
-    const clearTravelers = document.getElementById('clear-travelers');
-    const heroSearchSubmit = document.getElementById('hero-search-submit');
-
-    heroStartDate.addEventListener('click', () => {
-        heroDateInput.style.display = 'block';
-        heroStartDate.style.display = 'none';
-    });
-
-    heroDateInput.addEventListener('change', () => {
-        if (heroDateInput.value) {
-            heroStartDate.textContent = heroDateInput.value;
-            heroStartDate.style.display = 'block';
-            heroDateInput.style.display = 'none';
-        }
-    });
-
-    clearWhereTo.addEventListener('click', () => {
-        heroWhereTo.textContent = '';
-    });
-
-    clearTravelers.addEventListener('click', () => {
-        heroTravelers.textContent = '';
-    });
-
-    heroSearchSubmit.addEventListener('click', () => {
-        const whereTo = heroWhereTo.textContent.trim() || 'Not selected';
-        const startDate = heroStartDate.textContent.trim() === 'Select Date' ? 'Not selected' : heroStartDate.textContent;
-        const travelers = heroTravelers.textContent.trim() || 'Not selected';
-
-        alert(`Search Request:\nDestination: ${whereTo}\nStart Date: ${startDate}\nTravelers: ${travelers}\n\nSearching all parks for you!`);
-    });
 
     // 4. Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {

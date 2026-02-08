@@ -26,9 +26,11 @@ public class MountainsController {
 
     @PostMapping("/admin")
     public String addMountainFromForm(@ModelAttribute MountainsEntity newMountain) {
+        newMountain.setFormPath(newMountain.getFormPath()); // Add this line
         mountainsRepository.save(newMountain);
         return "redirect:/mountain/admin";
     }
+
 
     @PostMapping("/admin/delete/{id}")
     public String deleteMountainFromForm(@PathVariable Long id) {
@@ -45,7 +47,8 @@ public class MountainsController {
         return "mountains/edit";
     }
 
-    // Update mountain
+
+
     @PostMapping("/admin/update/{id}")
     public String updateMountain(@PathVariable Long id, @ModelAttribute MountainsEntity updatedMountain) {
         Optional<MountainsEntity> mountain = mountainsRepository.findById(id);
@@ -54,16 +57,31 @@ public class MountainsController {
             m.setName(updatedMountain.getName());
             m.setFeatures(updatedMountain.getFeatures());
             m.setImageUrl(updatedMountain.getImageUrl());
+            m.setFormPath(updatedMountain.getFormPath()); // Add this line
             m.setUpdatedAt(LocalDateTime.now());
             mountainsRepository.save(m);
         }
         return "redirect:/mountain/admin";
     }
 
-
     @GetMapping("/all")
     public String allMountains(Model model) {
         model.addAttribute("mountains", mountainsRepository.findAll());
         return "mountains/all";
+    }
+
+
+
+    @GetMapping("/{mountainName}")
+    public String mountainDetails(@PathVariable String mountainName, Model model) {
+        // Find by formPath first
+        Optional<MountainsEntity> mountain = mountainsRepository.findByFormPath("/mountain/" + mountainName);
+
+        if (mountain.isPresent()) {
+            model.addAttribute("mountain", mountain.get());
+            return "mountains/mountainspath/" + mountainName;
+        }
+
+        return "redirect:/mountain/all";
     }
 }
