@@ -18,12 +18,7 @@ public class UfaceController {
 
     // =================== ADMIN ONLY ===================
 
-//    @GetMapping("/park/{id}")
-//    public String showAllParksFromFace(@PathVariable Long id, Model model) {
-//        // Redirect to the main controller's "all parks" page
-//        // You can add any logic here if needed
-//        return "redirect:/parks/all";
-//    }
+
 
     @GetMapping("/park/{id}")
     public String showAllParksFromFace(@PathVariable Long id, Model model) {
@@ -97,4 +92,10 @@ public class UfaceController {
         }
         return "redirect:/three/admin";
     }
+
+    @GetMapping("/face")
+    public String allfacesareHer() {
+        return "face/userfaces/allFaces";
+    }
+
 }

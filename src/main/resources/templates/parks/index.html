@@ -918,16 +918,16 @@
                 console.log('Mountain Image URL:', /*[[${mountain.imageUrl}]]*/ '');
                 console.log('Mountain Style Applied:', document.currentScript.closest('.park-card').style.backgroundImage);
             </script>
-            <div class="park-content">
-                <h3 th:text="${mountain.name}">Mountain Name</h3>
-                <div class="park-location">Mountain Adventure</div>
-                <p th:text="${mountain.features} ?: 'Explore amazing mountain adventures'">Mountain features...</p>
-                <div class="park-features">
-                    <span class="park-feature">Climbing</span>
-                    <span class="park-feature">Hiking</span>
-                </div>
-                <a th:href="@{'/mountain/all'}" class="cta-btn">View All Mountains →</a>
-            </div>
+<!--            <div class="park-content">-->
+<!--                <h3 th:text="${mountain.name}">Mountain Name</h3>-->
+<!--                <div class="park-location">Mountain Adventure</div>-->
+<!--                <p th:text="${mountain.features} ?: 'Explore amazing mountain adventures'">Mountain features...</p>-->
+<!--                <div class="park-features">-->
+<!--                    <span class="park-feature">Climbing</span>-->
+<!--                    <span class="park-feature">Hiking</span>-->
+<!--                </div>-->
+<!--                <a th:href="@{'/mountain/all'}" class="cta-btn">View All Mountains →</a>-->
+<!--            </div>-->
         </div>
 
         <!-- Currency Box (Box 3) - Only show if currency exists -->
@@ -941,15 +941,15 @@
                 console.log('Currency Style Applied:', document.currentScript.closest('.park-card').style.backgroundImage);
             </script>
             <div class="park-content">
-                <h3 th:text="${currency.name}">Currency Name</h3>
-                <div class="park-location" th:text="${currency.code}">Currency Code</div>
-                <p th:text="${currency.description} ?: 'Currency exchange rates and information'">Currency description...</p>
-                <div class="park-features">
-                    <span class="park-feature" th:text="${currency.symbol}">Symbol</span>
-                    <span class="park-feature" th:if="${currency.rate != null}"
-                          th:text="${'Rate: ' + currency.rate}">Exchange Rate</span>
-                </div>
-                <a th:href="@{'/money/all'}" class="cta-btn">View All Currencies →</a>
+<!--                <h3 th:text="${currency.name}">Currency Name</h3>-->
+<!--                <div class="park-location" th:text="${currency.code}">Currency Code</div>-->
+<!--                <p th:text="${currency.description} ?: 'Currency exchange rates and information'">Currency description...</p>-->
+<!--                <div class="park-features">-->
+<!--                    <span class="park-feature" th:text="${currency.symbol}">Symbol</span>-->
+<!--                    <span class="park-feature" th:if="${currency.rate != null}"-->
+<!--                          th:text="${'Rate: ' + currency.rate}">Exchange Rate</span>-->
+<!--                </div>-->
+<!--                <a th:href="@{'/money/all'}" class="cta-btn">View All Currencies →</a>-->
             </div>
         </div>
 
@@ -970,17 +970,21 @@
 
 
 
-<!-- Routes Section (Dynamic from Database) -->
+
+<!-- Routes Section (Dynamic from FaceRoute Database)-->
+
+
 <section id="routes" class="routes-section">
     <div class="container">
         <h2 class="section-heading">Featured Adventure Routes</h2>
         <div class="routes-grid">
-            <!-- Dynamic Routes from Database (Limited to 3) -->
-            <div th:each="route, stat : ${routes}" class="route-card">
+            <!-- Dynamic FaceRoute from Database (Limited to 3) -->
+            <div th:each="route, stat : ${faceroute}" class="route-card">
                 <div class="route-header">
                     <h3 th:text="${route.routeName} ?: 'Unnamed Route'">Route Name</h3>
                     <span class="route-difficulty" th:text="${route.status} ?: 'available'">Status</span>
                 </div>
+
                 <!-- Image Container with Price Badge -->
                 <div class="route-image-container" style="position: relative;">
                     <th:block th:if="${route.imageUrl != null and route.imageUrl != ''}">
@@ -1012,14 +1016,10 @@
                     </div>
                 </div>
 
-
                 <div class="route-content">
                     <p th:text="${route.description} ?: 'Explore this amazing route through beautiful landscapes and scenic views.'">
                         Route description will appear here...
                     </p>
-
-
-
 
                     <div class="route-highlights">
                         <h4>Route Details</h4>
@@ -1081,35 +1081,41 @@
                         </ul>
                     </div>
 
-                    <a href="#contact" class="cta-btn">Learn About This Route</a>
+
+
+                    <!-- Corrected Link: Swaps Lroutes ↔ Mroutes (Budget stays on index 1) -->
+                    <a
+                            th:href="@{${stat.index == 0 ? '/mroutes/all' : (stat.index == 1 ? '/broutes/all' : '/lroutes/all')}}"
+                            th:unless="${route.formPath != null and route.formPath != ''}"
+                            class="cta-btn">
+                        Learn About This Route
+                    </a>
+
                 </div>
             </div>
 
-
-
-
-
-            <div th:if="${#lists.isEmpty(routes)}" style="text-align: center; padding: 40px;">
+            <div th:if="${#lists.isEmpty(faceroute)}" style="text-align: center; padding: 40px;">
                 <p>No adventure routes available at the moment. Check back soon!</p>
             </div>
         </div>
-
-        <!-- "View All Routes" Button -->
-        <div th:if="${routes.size() > 0}" style="text-align: center; margin-top: 3rem;">
-            <a th:href="@{/parks/routes/all}" class="cta-btn" style="background: #0a4d2b;">
-                View All Adventure Routes →
-            </a>
-        </div>
     </div>
 </section>
+
+
+
+
+
+
+
+
 
 
 <!-- Epic Adventures Section (Dynamic from Database) -->
 <section id="epic-adventures" class="container">
     <h2 class="section-heading">Our Epic Luxury Hotels</h2>
     <div class="adventures-grid">
-        <!-- Dynamic Hotels from Database -->
-        <div th:each="hotel : ${hotels}" class="adventure-card">
+        <!-- Dynamic Hotels from Database (ADD stat to th:each for index tracking) -->
+        <div th:each="hotel, stat : ${hotels}" class="adventure-card">
             <th:block th:if="${hotel.imageUrl != null and !hotel.imageUrl.isEmpty()}">
                 <img th:src="${hotel.imageUrl}"
                      th:alt="${hotel.name}"
@@ -1151,7 +1157,13 @@
                     </div>
                 </th:block>
 
-                <a href="#contact" class="cta-btn">Book Now</a>
+                <!-- DYNAMIC "Book Now" LINK (Index-Based Mapping) -->
+                <!-- Final Corrected Link (swaps Budget ↔ Mid-Range) -->
+                <a
+                        th:href="@{${stat.index == 0 ? '/luxury/all' : (stat.index == 1 ? '/mhotels/all' : '/bhotels/all')}}"
+                        class="cta-btn">
+                    Book Now
+                </a>
             </div>
         </div>
 
@@ -1161,10 +1173,6 @@
         </div>
     </div>
 </section>
-
-
-
-
 
 
 

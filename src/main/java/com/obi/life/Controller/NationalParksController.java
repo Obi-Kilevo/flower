@@ -19,8 +19,8 @@ public class NationalParksController {
     @Autowired
     private NationalParksRepository nationalParksRepository;
 
-    @Autowired
-    private RoutesRepository routesRepository;
+//    @Autowired
+//    private RoutesRepository routesRepository;
 
 
     @Autowired
@@ -41,6 +41,15 @@ public class NationalParksController {
 
     @Autowired
     private UfaceRepository  ufaceRepository;
+
+    @Autowired
+    private FaceRouteRepository faceRouteRepository;
+
+    @Autowired
+    private FaceHotelsRepository faceHotelRepository;
+
+
+
 
     @Autowired
     private MountainsRepository  mountainRepository;
@@ -110,18 +119,12 @@ public class NationalParksController {
                 .toList();
         model.addAttribute("parks", parks);
 
-        // Add routes for user view
-        List<RoutesEntity> routes = routesRepository.findAll().stream()
-                .filter(r -> "available".equals(r.getStatus()))
-                .limit(3)
-                .toList();
-        model.addAttribute("routes", routes);
 
 
-        List<LuxuryHotelsEntity> hotels = luxuryHotelsRepository.findAll().stream()
-                .limit(3)  // Show max 4 hotels
-                .toList();
-        model.addAttribute("hotels", hotels);
+//        List<LuxuryHotelsEntity> hotels = luxuryHotelsRepository.findAll().stream()
+//                .limit(3)  // Show max 4 hotels
+//                .toList();
+//        model.addAttribute("hotels", hotels);
 
 
         List<CampEntity> camps = campRepository.findAll().stream()
@@ -148,22 +151,20 @@ public class NationalParksController {
         model.addAttribute("face", face);  // ✅
 
 
-//// Get single mountain or null
-//        MountainsEntity mountain = mountainRepository.findAll().stream()
-//                .findFirst()
-//                .orElse(null);
-//        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
-//
-//
-//        // Add after mountain
-//        CurrencyEntity currency = currencyRepository.findAll().stream()
-//                .findFirst()
-//                .orElse(null);
-//        model.addAttribute("currency", currency);
+        List<FaceRouteEntity> faceroute = faceRouteRepository.findAll().stream()
+                .limit(3)
+                .toList();
+        model.addAttribute("faceroute", faceroute);  // ✅
+
+
+        List<FaceHotelsEntity> facehotels = faceHotelRepository.findAll().stream()
+                .limit(3)
+                .toList();
+        model.addAttribute("hotels", facehotels);
+
 
         return "parks/index";
     }
-
 
 
 
@@ -183,27 +184,27 @@ public class NationalParksController {
 
 
     // In your NationalParksController.java
-    @GetMapping("/routes/all")
-    public String allRoutes(Model model) {
-        List<RoutesEntity> allRoutes = routesRepository.findAll().stream()
-                .filter(r -> "available".equals(r.getStatus()))
-                .toList();
-        model.addAttribute("routes", allRoutes);
-        model.addAttribute("totalRoutes", allRoutes.size());
-        return "parks/all-routes";  // Create this template
-    }
+//    @GetMapping("/routes/all")
+//    public String allRoutes(Model model) {
+//        List<RoutesEntity> allRoutes = routesRepository.findAll().stream()
+//                .filter(r -> "available".equals(r.getStatus()))
+//                .toList();
+//        model.addAttribute("routes", allRoutes);
+//        model.addAttribute("totalRoutes", allRoutes.size());
+//        return "parks/all-routes";  // Create this template
+//    }
 
 
 
     // In your NationalParksController.java
-    @GetMapping("/admin/routes")
-    public String adminRoutes(Model model) {
-        model.addAttribute("routes", routesRepository.findAll());
-        model.addAttribute("newRoute", new RoutesEntity());
-
-        model.addAttribute("newRoute", new RoutesEntity());
-        return "parks/admin-routes";
-    }
+//    @GetMapping("/admin/routes")
+//    public String adminRoutes(Model model) {
+//        model.addAttribute("routes", routesRepository.findAll());
+//        model.addAttribute("newRoute", new RoutesEntity());
+//
+//        model.addAttribute("newRoute", new RoutesEntity());
+//        return "parks/admin-routes";
+//    }
 
 
 
@@ -213,9 +214,9 @@ public class NationalParksController {
     @GetMapping("/admin")
     public String adminParks(Model model) {
         model.addAttribute("parks", nationalParksRepository.findAll());
-        model.addAttribute("routes", routesRepository.findAll());
+//        model.addAttribute("routes", routesRepository.findAll());
         model.addAttribute("newPark", new NationalParksEntity());
-        model.addAttribute("newRoute", new RoutesEntity());
+//        model.addAttribute("newRoute", new RoutesEntity());
 
 
 
@@ -284,65 +285,70 @@ public class NationalParksController {
     }
 
     // === ROUTE ADMIN METHODS ===
-    @PostMapping("/admin/route/add")
-    public String addRoute(@ModelAttribute RoutesEntity newRoute) {
-        routesRepository.save(newRoute);
-        return "redirect:/parks/admin";
-    }
+//    @PostMapping("/admin/route/add")
+//    public String addRoute(@ModelAttribute RoutesEntity newRoute) {
+//        routesRepository.save(newRoute);
+//        return "redirect:/parks/admin/routes";
+//    }
 
-    @PostMapping("/admin/route/delete/{id}")
-    public String deleteRoute(@PathVariable Long id) {
-        routesRepository.deleteById(id);
-        return "redirect:/parks/admin";
-    }
+//    @PostMapping("/admin/route/delete/{id}")
+//    public String deleteRoute(@PathVariable Long id) {
+//        routesRepository.deleteById(id);
+////        return "redirect:/parks/admin";
+//        return "redirect:/parks/admin/routes";
+//    }
 
-    @PostMapping("/admin/route/toggle/{id}")
-    public String toggleRouteStatus(@PathVariable Long id) {
-        Optional<RoutesEntity> route = routesRepository.findById(id);
-        if (route.isPresent()) {
-            RoutesEntity r = route.get();
-            r.setStatus(r.getStatus().equals("available") ? "unavailable" : "available");
-            r.setUpdatedAt(LocalDateTime.now());
-            routesRepository.save(r);
-        }
-        return "redirect:/parks/admin";
-    }
+//    @PostMapping("/admin/route/toggle/{id}")
+//    public String toggleRouteStatus(@PathVariable Long id) {
+//        Optional<RoutesEntity> route = routesRepository.findById(id);
+//        if (route.isPresent()) {
+//            RoutesEntity r = route.get();
+//            r.setStatus(r.getStatus().equals("available") ? "unavailable" : "available");
+//            r.setUpdatedAt(LocalDateTime.now());
+//            routesRepository.save(r);
+//        }
+//        return "redirect:/parks/admin/routes";
+//    }
 
-    @GetMapping("/admin/route/edit/{id}")
-    public String showEditRouteForm(@PathVariable Long id, Model model) {
-        Optional<RoutesEntity> route = routesRepository.findById(id);
-        if (route.isEmpty()) return "redirect:/parks/admin";
-        model.addAttribute("route", route.get());
-        return "parks/edit-route";
-    }
-
-    @PostMapping("/admin/route/edit/{id}")
-    public String updateRoute(@PathVariable Long id, @ModelAttribute RoutesEntity updatedRoute) {
-        Optional<RoutesEntity> optionalRoute = routesRepository.findById(id);
-        if (optionalRoute.isEmpty()) return "redirect:/parks/admin";
-
-        RoutesEntity route = optionalRoute.get();
-        route.setParkName(updatedRoute.getParkName());
-        route.setRouteName(updatedRoute.getRouteName());
-        route.setDescription(updatedRoute.getDescription());
-        route.setPrice(updatedRoute.getPrice());
-        route.setShowPrice(updatedRoute.getShowPrice());
-        route.setStatus(updatedRoute.getStatus());
-        route.setImageUrl(updatedRoute.getImageUrl());
-        route.setUpdatedAt(LocalDateTime.now());
+//    @GetMapping("/admin/route/edit/{id}")
+//    public String showEditRouteForm(@PathVariable Long id, Model model) {
+//        Optional<RoutesEntity> route = routesRepository.findById(id);
+//        if (route.isEmpty()) return "redirect:/parks/admin";
+//        model.addAttribute("route", route.get());
+//        return "parks/edit-route";
+//    }
 
 
-        route.setDescAdventureType(updatedRoute.getDescAdventureType());
-        route.setDescDuration(updatedRoute.getDescDuration());
-        route.setDescMeals(updatedRoute.getDescMeals());
-        route.setDescAccommodation(updatedRoute.getDescAccommodation());
-        route.setDescActivities(updatedRoute.getDescActivities());
-        route.setDescTransport(updatedRoute.getDescTransport());
 
-
-        routesRepository.save(route);
-        return "redirect:/parks/admin";
-    }
+//
+//    @PostMapping("/admin/route/edit/{id}")
+//    public String updateRoute(@PathVariable Long id, @ModelAttribute RoutesEntity updatedRoute) {
+//        Optional<RoutesEntity> optionalRoute = routesRepository.findById(id);
+//        if (optionalRoute.isEmpty()) return "redirect:/parks/admin";
+//
+//        RoutesEntity route = optionalRoute.get();
+//        route.setParkName(updatedRoute.getParkName());
+//        route.setRouteName(updatedRoute.getRouteName());
+//        route.setDescription(updatedRoute.getDescription());
+//        route.setPrice(updatedRoute.getPrice());
+//        route.setShowPrice(updatedRoute.getShowPrice());
+//        route.setStatus(updatedRoute.getStatus());
+//        route.setImageUrl(updatedRoute.getImageUrl());
+//        route.setUpdatedAt(LocalDateTime.now());
+//
+//
+//        route.setDescAdventureType(updatedRoute.getDescAdventureType());
+//        route.setDescDuration(updatedRoute.getDescDuration());
+//        route.setDescMeals(updatedRoute.getDescMeals());
+//        route.setDescAccommodation(updatedRoute.getDescAccommodation());
+//        route.setDescActivities(updatedRoute.getDescActivities());
+//        route.setDescTransport(updatedRoute.getDescTransport());
+//
+//
+//        routesRepository.save(route);
+////        return "redirect:/parks/admin";
+//        return "redirect:/parks/admin/routes";
+//    }
 
 
     // Add this method for separate admin list endpoint
@@ -370,3 +376,22 @@ public class NationalParksController {
         return "redirect:/parks/all";
     }
 }
+
+
+
+
+
+
+//// Get single mountain or null
+//        MountainsEntity mountain = mountainRepository.findAll().stream()
+//                .findFirst()
+//                .orElse(null);
+//        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
+//
+//
+//        // Add after mountain
+//        CurrencyEntity currency = currencyRepository.findAll().stream()
+//                .findFirst()
+//                .orElse(null);
+//        model.addAttribute("currency", currency);
+

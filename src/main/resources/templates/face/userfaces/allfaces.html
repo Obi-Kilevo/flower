@@ -37,27 +37,26 @@
 
     <!-- Button Grid (Core Action Buttons) -->
     <div class="btn-grid">
-        <!-- Buttons link to backend paths (YOU define the paths in your backend) -->
-        <button class="admin-btn btn-view" onclick="navigateTo('/parks/admin')">About Parks</button>
-        <button class="admin-btn btn-edit" onclick="navigateTo('/camp/admin')">Camp Hotels</button>
-        <button class="admin-btn btn-edit" onclick="navigateTo('/lodges/admin')">Lodge Hotels</button>
-        <button class="admin-btn btn-view" onclick="navigateTo('/luxury/admin')">Luxury Hotels</button>
-        <button class="admin-btn" onclick="navigateTo('/bhotels/admin')">Budget Hotels</button>
-        <button class="admin-btn" onclick="navigateTo('/mhotels/admin')">Mid-range Hotels</button>
-        <button class="admin-btn" onclick="navigateTo('/parks/admin/list')">All Parks Lists</button>
-        <button class="admin-btn" onclick="navigateTo('/lroutes/admin')">Luxury Routes</button>
-        <button class="admin-btn" onclick="navigateTo('/mroutes/admin')">Mid-Range Routes</button>
-        <button class="admin-btn" onclick="navigateTo('/broutes/admin')">Budget Routes</button>
+
+<!--        <button class="admin-btn btn-view" onclick="navigateTo('/parks/admin')">About Parks</button>-->
+<!--        <button class="admin-btn btn-edit" onclick="navigateTo('/camp/admin')">Camp Hotels</button>-->
+<!--        <button class="admin-btn btn-edit" onclick="navigateTo('/lodges/admin')">Lodge Hotels</button>-->
+<!--        <button class="admin-btn btn-view" onclick="navigateTo('/luxury/admin')">Luxury Hotels</button>-->
+        <button class="admin-btn" onclick="navigateTo('/three/admin')">Facen One</button>
+        <button class="admin-btn" onclick="navigateTo('/faceroute/admin')">Face Two</button>
+        <button class="admin-btn" onclick="navigateTo('/fhotels/admin')">Face Three</button>
 
         <button class="admin-btn btn-delete" onclick="navigateTo('/three/face')">My 5 face</button>
 
-<!--        <button class="admin-btn btn-view" onclick="navigateTo('/admin/tours/reports')">Generate Reports</button>-->
+        <!--        <button class="admin-btn btn-view" onclick="navigateTo('/admin/tours/reports')">Generate Reports</button>-->
     </div>
 </div>
 
 <script>
+    // Core navigation function (triggers backend path calls)
     function navigateTo(backendPath) {
         window.location.href = backendPath;
+
     }
 </script>
 </body>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Budget Route</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .preview-container {
+      max-width: 300px;
+      max-height: 200px;
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .img-preview {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .example-box {
+      background: #f8f9fa;
+      border-left: 4px solid #e74c3c;
+      padding: 10px 15px;
+      margin-top: 5px;
+      border-radius: 4px;
+    }
+    .url-type-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.8em;
+      margin-right: 5px;
+    }
+    .url-type-direct {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+    .url-type-static {
+      background: #d4edda;
+      color: #155724;
+    }
+    .desc-section {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <h2>Edit Budget Route</h2>
+
+  <form th:action="@{/broutes/admin/update/{id}(id=${route.id})}"
+        th:object="${route}"
+        method="post">
+
+    <div class="card mb-4">
+      <div class="card-header bg-danger text-white">
+        <h5 class="mb-0">📋 Basic Information</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Park Name</label>
+            <input type="text" class="form-control" th:field="*{parkName}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Route Name</label>
+            <input type="text" class="form-control" th:field="*{routeName}" required>
+          </div>
+          <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" th:field="*{description}" rows="3"></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Form Path</label>
+            <input type="text" class="form-control" th:field="*{formPath}" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">💰 Pricing & Status</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Price ($)</label>
+            <input type="number" class="form-control" th:field="*{price}" step="0.01">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Show Price?</label>
+            <select class="form-select" th:field="*{showPrice}">
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select class="form-select" th:field="*{status}">
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0">📝 Route Details (Optional)</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">⭐</span> Adventure Type
+              </label>
+              <input type="text" class="form-control" th:field="*{descAdventureType}"
+                     placeholder="e.g., Budget Tour, Backpacking">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">⏱️</span> Duration
+              </label>
+              <input type="text" class="form-control" th:field="*{descDuration}"
+                     placeholder="e.g., 2 Days / 1 Night">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">🍽️</span> Meals
+              </label>
+              <input type="text" class="form-control" th:field="*{descMeals}"
+                     placeholder="e.g., Self-catering">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">🏨</span> Accommodation
+              </label>
+              <input type="text" class="form-control" th:field="*{descAccommodation}"
+                     placeholder="e.g., Hostels, Camping">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">🚶‍♂️</span> Activities
+              </label>
+              <input type="text" class="form-control" th:field="*{descActivities}"
+                     placeholder="e.g., Self-guided Hiking">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="desc-section">
+              <label class="form-label fw-bold">
+                <span style="color: #e74c3c;">🚗</span> Transport
+              </label>
+              <input type="text" class="form-control" th:field="*{descTransport}"
+                     placeholder="e.g., Public Transport">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header bg-warning text-white">
+        <h5 class="mb-0">🖼️ Route Image</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Image URL or Path</label>
+          <input type="text" class="form-control" th:field="*{imageUrl}"
+                 placeholder="Enter URL or path..."
+                 id="imageUrlInput">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Live Preview</label>
+          <div class="preview-container" id="imagePreview">
+            <div th:if="${route.imageUrl != null and !route.imageUrl.isEmpty()}" class="text-center">
+              <img th:src="${route.imageUrl}"
+                   alt="Route Image Preview"
+                   class="img-preview"
+                   id="previewImage"
+                   onerror="showPreviewError()">
+            </div>
+            <div th:unless="${route.imageUrl != null and !route.imageUrl.isEmpty()}" class="text-center text-muted">
+              <div style="font-size: 3rem;">🏞️</div>
+              <div>No image provided</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="submit" class="btn btn-danger">Update Route</button>
+      <a th:href="@{/broutes/admin}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

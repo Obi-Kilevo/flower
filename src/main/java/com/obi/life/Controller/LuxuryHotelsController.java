@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+
 @Controller
 @RequestMapping("/luxury")
 public class LuxuryHotelsController {
@@ -21,7 +22,7 @@ public class LuxuryHotelsController {
     public String adminHotels(Model model) {
         model.addAttribute("hotels", luxuryHotelsRepository.findAll());
         model.addAttribute("newHotel", new LuxuryHotelsEntity());
-        return "luxuryHotels/admin";
+        return "facehotels/luxury/admin";  // Updated path
     }
 
     @PostMapping("/admin")
@@ -42,7 +43,7 @@ public class LuxuryHotelsController {
         Optional<LuxuryHotelsEntity> hotel = luxuryHotelsRepository.findById(id);
         if (hotel.isEmpty()) return "redirect:/luxury/admin";
         model.addAttribute("hotel", hotel.get());
-        return "luxuryHotels/edit";
+        return "facehotels/luxury/edit";  // Updated path
     }
 
     // 2. POST method for updating (RENAMED - was updateHotelFromForm)
@@ -63,5 +64,11 @@ public class LuxuryHotelsController {
             luxuryHotelsRepository.save(h);
         }
         return "redirect:/luxury/admin";
+    }
+
+    @GetMapping("/all")
+    public String aallLuxuryHotels(Model model) {
+        model.addAttribute("hotels", luxuryHotelsRepository.findAll());
+        return "facehotels/luxury/all";
     }
 }
