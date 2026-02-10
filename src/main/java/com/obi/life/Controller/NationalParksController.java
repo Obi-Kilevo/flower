@@ -27,8 +27,8 @@ public class NationalParksController {
     private LuxuryHotelsRepository luxuryHotelsRepository;
 
 
-    @Autowired
-    private CampRepository campRepository;
+//    @Autowired
+//    private CampRepository campRepository;
 
 
 
@@ -47,6 +47,11 @@ public class NationalParksController {
 
     @Autowired
     private FaceHotelsRepository faceHotelRepository;
+
+
+    @Autowired
+    private FaceCampsRepository faceCampsRepository;
+
 
 
 
@@ -127,7 +132,7 @@ public class NationalParksController {
 //        model.addAttribute("hotels", hotels);
 
 
-        List<CampEntity> camps = campRepository.findAll().stream()
+        List<FaceCampsEntity> camps = faceCampsRepository.findAll().stream()
                 .limit(3)  // Show max 3 camps
                 .toList();
         model.addAttribute("camps", camps);
@@ -179,35 +184,6 @@ public class NationalParksController {
         model.addAttribute("totalParks", allParks.size());
         return "parks/all";
     }
-
-
-
-
-    // In your NationalParksController.java
-//    @GetMapping("/routes/all")
-//    public String allRoutes(Model model) {
-//        List<RoutesEntity> allRoutes = routesRepository.findAll().stream()
-//                .filter(r -> "available".equals(r.getStatus()))
-//                .toList();
-//        model.addAttribute("routes", allRoutes);
-//        model.addAttribute("totalRoutes", allRoutes.size());
-//        return "parks/all-routes";  // Create this template
-//    }
-
-
-
-    // In your NationalParksController.java
-//    @GetMapping("/admin/routes")
-//    public String adminRoutes(Model model) {
-//        model.addAttribute("routes", routesRepository.findAll());
-//        model.addAttribute("newRoute", new RoutesEntity());
-//
-//        model.addAttribute("newRoute", new RoutesEntity());
-//        return "parks/admin-routes";
-//    }
-
-
-
 
 
     // =================== ADMIN - BOTH PARKS & ROUTES ===================
@@ -283,72 +259,6 @@ public class NationalParksController {
         }
         return "redirect:/parks/admin";
     }
-
-    // === ROUTE ADMIN METHODS ===
-//    @PostMapping("/admin/route/add")
-//    public String addRoute(@ModelAttribute RoutesEntity newRoute) {
-//        routesRepository.save(newRoute);
-//        return "redirect:/parks/admin/routes";
-//    }
-
-//    @PostMapping("/admin/route/delete/{id}")
-//    public String deleteRoute(@PathVariable Long id) {
-//        routesRepository.deleteById(id);
-////        return "redirect:/parks/admin";
-//        return "redirect:/parks/admin/routes";
-//    }
-
-//    @PostMapping("/admin/route/toggle/{id}")
-//    public String toggleRouteStatus(@PathVariable Long id) {
-//        Optional<RoutesEntity> route = routesRepository.findById(id);
-//        if (route.isPresent()) {
-//            RoutesEntity r = route.get();
-//            r.setStatus(r.getStatus().equals("available") ? "unavailable" : "available");
-//            r.setUpdatedAt(LocalDateTime.now());
-//            routesRepository.save(r);
-//        }
-//        return "redirect:/parks/admin/routes";
-//    }
-
-//    @GetMapping("/admin/route/edit/{id}")
-//    public String showEditRouteForm(@PathVariable Long id, Model model) {
-//        Optional<RoutesEntity> route = routesRepository.findById(id);
-//        if (route.isEmpty()) return "redirect:/parks/admin";
-//        model.addAttribute("route", route.get());
-//        return "parks/edit-route";
-//    }
-
-
-
-//
-//    @PostMapping("/admin/route/edit/{id}")
-//    public String updateRoute(@PathVariable Long id, @ModelAttribute RoutesEntity updatedRoute) {
-//        Optional<RoutesEntity> optionalRoute = routesRepository.findById(id);
-//        if (optionalRoute.isEmpty()) return "redirect:/parks/admin";
-//
-//        RoutesEntity route = optionalRoute.get();
-//        route.setParkName(updatedRoute.getParkName());
-//        route.setRouteName(updatedRoute.getRouteName());
-//        route.setDescription(updatedRoute.getDescription());
-//        route.setPrice(updatedRoute.getPrice());
-//        route.setShowPrice(updatedRoute.getShowPrice());
-//        route.setStatus(updatedRoute.getStatus());
-//        route.setImageUrl(updatedRoute.getImageUrl());
-//        route.setUpdatedAt(LocalDateTime.now());
-//
-//
-//        route.setDescAdventureType(updatedRoute.getDescAdventureType());
-//        route.setDescDuration(updatedRoute.getDescDuration());
-//        route.setDescMeals(updatedRoute.getDescMeals());
-//        route.setDescAccommodation(updatedRoute.getDescAccommodation());
-//        route.setDescActivities(updatedRoute.getDescActivities());
-//        route.setDescTransport(updatedRoute.getDescTransport());
-//
-//
-//        routesRepository.save(route);
-////        return "redirect:/parks/admin";
-//        return "redirect:/parks/admin/routes";
-//    }
 
 
     // Add this method for separate admin list endpoint
