@@ -287,21 +287,3 @@ public class NationalParksController {
     }
 }
 
-
-
-
-
-
-//// Get single mountain or null
-//        MountainsEntity mountain = mountainRepository.findAll().stream()
-//                .findFirst()
-//                .orElse(null);
-//        model.addAttribute("mountain", mountain);  // ✅ Single object, not list/ Single mountain for box 2
-//
-//
-//        // Add after mountain
-//        CurrencyEntity currency = currencyRepository.findAll().stream()
-//                .findFirst()
-//                .orElse(null);
-//        model.addAttribute("currency", currency);
-

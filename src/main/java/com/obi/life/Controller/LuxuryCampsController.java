@@ -1,6 +1,6 @@
 package com.obi.life.Controller;
 
-import com.obi.life.Entity.CampEntity;
+import com.obi.life.Entity.LuxuryCampsEntity;
 import com.obi.life.Repository.CampRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/camp")
-public class CampController {
+@RequestMapping("/lcamps")
+public class LuxuryCampsController {
 
     @Autowired
     private CampRepository campRepository;
@@ -21,35 +21,35 @@ public class CampController {
     @GetMapping("/admin")
     public String adminCamps(Model model) {
         model.addAttribute("camps", campRepository.findAll());
-        model.addAttribute("newCamp", new CampEntity());
-        return "camp/admin";
+        model.addAttribute("newCamp", new LuxuryCampsEntity());
+        return "facecamps/luxury/admin";
     }
 
     @PostMapping("/admin")
-    public String addCampFromForm(@ModelAttribute CampEntity newCamp) {
+    public String addCampFromForm(@ModelAttribute LuxuryCampsEntity newCamp) {
         campRepository.save(newCamp);
-        return "redirect:/camp/admin";
+        return "redirect:/lcamps/admin";
     }
 
     @PostMapping("/admin/delete/{id}")
     public String deleteCampFromForm(@PathVariable Long id) {
         campRepository.deleteById(id);
-        return "redirect:/camp/admin";
+        return "redirect:/lcamps/admin";
     }
 
     @GetMapping("/admin/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<CampEntity> camp = campRepository.findById(id);
-        if (camp.isEmpty()) return "redirect:/camp/admin";
+        Optional<LuxuryCampsEntity> camp = campRepository.findById(id);
+        if (camp.isEmpty()) return "redirect:/lcamps/admin";
         model.addAttribute("camp", camp.get());
-        return "camp/edit";
+        return "facecamps/luxury/edit";
     }
 
     @PostMapping("/admin/update/{id}")
-    public String updateCamp(@PathVariable Long id, @ModelAttribute CampEntity updatedCamp) {
-        Optional<CampEntity> camp = campRepository.findById(id);
+    public String updateCamp(@PathVariable Long id, @ModelAttribute LuxuryCampsEntity updatedCamp) {
+        Optional<LuxuryCampsEntity> camp = campRepository.findById(id);
         if (camp.isPresent()) {
-            CampEntity c = camp.get();
+            LuxuryCampsEntity c = camp.get();
             c.setName(updatedCamp.getName());
             c.setCity(updatedCamp.getCity());
             c.setCountry(updatedCamp.getCountry());
@@ -61,6 +61,12 @@ public class CampController {
             c.setUpdatedAt(LocalDateTime.now());
             campRepository.save(c);
         }
-        return "redirect:/camp/admin";
+        return "redirect:/lcamps/admin";
+    }
+
+    @GetMapping("/all")
+    public String allCamps(Model model) {
+        model.addAttribute("camps", campRepository.findAll());
+        return "facecamps/luxury/all"; // or your template name
     }
 }

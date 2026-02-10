@@ -16,7 +16,7 @@
 <div class="container mt-4">
   <h2>✏️ Edit Camp Hotel</h2>
 
-  <form th:action="@{/camp/admin/update/{id}(id=${camp.id})}"
+  <form th:action="@{/lcamps/admin/update/{id}(id=${camp.id})}"
         th:object="${camp}"
         method="post">
 
@@ -138,7 +138,7 @@
     <!-- Submit Buttons -->
     <div class="mb-3">
       <button type="submit" class="btn btn-success">Update Camp</button>
-      <a th:href="@{/camp/admin}" class="btn btn-secondary">Cancel</a>
+      <a th:href="@{/lcamps/admin}" class="btn btn-secondary">Cancel</a>
     </div>
   </form>
 </div>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Luxury Camps | ParkAdventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 5%;
+        }
+        .section-heading {
+            color: #9b59b6;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.2rem;
+        }
+        .camps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        .camp-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .camp-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .camp-header {
+            background: #9b59b6;
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .camp-location {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .camp-content {
+            padding: 1.8rem;
+        }
+        .camp-features ul {
+            list-style: none;
+            padding: 0;
+        }
+        .camp-features li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .cta-btn {
+            background: #9b59b6;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .cta-btn:hover {
+            background: #8e44ad;
+        }
+        .back-btn {
+            background: #9b59b6;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: background 0.3s;
+        }
+        .back-btn:hover {
+            background: #8e44ad;
+        }
+        .camp-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #9b59b6;
+            margin-bottom: 0.3rem;
+        }
+        .price-container {
+            background: rgba(155, 89, 182, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .camp-image-container {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+        .camp-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .camp-card:hover .camp-image {
+            transform: scale(1.05);
+        }
+        .price-badge {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(155, 89, 182, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+        }
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            color: #666;
+        }
+        .features-title {
+            color: #9b59b6;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a th:href="@{/parks/user}" class="back-btn">← Back to Home</a>
+
+    <h1 class="section-heading">All Luxury Camps</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+        Showing <span th:text="${camps != null ? camps.size() : 0}">0</span> luxury camps
+    </p>
+
+    <div class="camps-grid">
+        <div th:each="camp : ${camps}" class="camp-card">
+            <div class="camp-header">
+                <h3 th:text="${camp.name} ?: 'Unnamed Camp'">Camp Name</h3>
+                <div class="camp-location" th:if="${camp.city != null and camp.city != ''}">
+                    <span th:text="${camp.city}">City</span>
+                </div>
+            </div>
+
+            <div class="camp-image-container">
+                <th:block th:if="${camp.imageUrl != null and camp.imageUrl != ''}">
+                    <img th:src="${camp.imageUrl}"
+                         th:alt="${camp.name}"
+                         class="camp-image"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;background:#f5f5f5;><div><i style=font-size:3rem;>🏕️</i><br>Image Not Found</div></div>';" />
+                </th:block>
+
+                <th:block th:unless="${camp.imageUrl != null and camp.imageUrl != ''}">
+                    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;background:#f5f5f5;">
+                        <div>
+                            <i style="font-size:3rem;">🏕️</i><br>
+                            Image Not Provided
+                        </div>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${camp.price != null}">
+                    <div class="price-badge">
+                        $<span th:text="${#numbers.formatDecimal(camp.price, 1, 2)}">0.00</span>
+                        <span style="font-size:0.85em; opacity:0.9;" th:text="${camp.currency ?: 'USD'}">USD</span>
+                    </div>
+                </th:block>
+            </div>
+
+            <div class="camp-content">
+                <div class="location-info">
+                    <span style="color: #9b59b6;">📍</span>
+                    <span th:if="${camp.address != null and camp.address != ''}" th:text="${camp.address}">Address</span>
+                    <span th:unless="${camp.address != null and camp.address != ''}" style="color: #888;">
+            Address not specified
+          </span>
+                </div>
+
+                <div class="location-info">
+                    <span style="color: #9b59b6;">🌍</span>
+                    <span th:text="${camp.country} ?: 'Country not specified'">Country</span>
+                </div>
+
+                <th:block th:if="${camp.price != null}">
+                    <div class="price-container">
+                        <div class="camp-price">
+                            $<span th:text="${#numbers.formatDecimal(camp.price, 1, 2)}">0.00</span>
+                        </div>
+                        <div style="color: #666; font-size: 0.9rem;">
+                            <span th:text="${camp.currency ?: 'USD'}">USD</span> per night
+                        </div>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${camp.features != null and camp.features != ''}">
+                    <div class="camp-features">
+                        <h4 class="features-title">Camp Features</h4>
+                        <div style="color: #555; line-height: 1.7;">
+                            <span th:text="${camp.features}">Features description...</span>
+                        </div>
+                    </div>
+                </th:block>
+
+                <th:block th:unless="${camp.features != null and camp.features != ''}">
+                    <div style="color: #888; font-style: italic; margin: 1rem 0;">
+                        No features description provided
+                    </div>
+                </th:block>
+
+                <div style="font-size: 0.85rem; color: #888; margin-top: 1.5rem; border-top: 1px solid #eee; padding-top: 1rem;">
+                    <div th:if="${camp.createdAt != null}">
+                        Added: <span th:text="${#temporals.format(camp.createdAt, 'MMM dd, yyyy')}">Date</span>
+                    </div>
+                    <div th:if="${camp.updatedAt != null and camp.updatedAt != camp.createdAt}">
+                        Updated: <span th:text="${#temporals.format(camp.updatedAt, 'MMM dd, yyyy')}">Date</span>
+                    </div>
+                </div>
+
+                <th:block th:if="${camp.formPath != null and camp.formPath != ''}">
+                    <a th:href="@{'/lcamps/' + ${camp.formPath}}"
+                       class="cta-btn">
+                        View Details →
+                    </a>
+                </th:block>
+
+                <th:block th:unless="${camp.formPath != null and camp.formPath != ''}">
+                    <a th:href="@{'/lcamps/details/' + ${camp.id}}"
+                       class="cta-btn">
+                        View Details →
+                    </a>
+                </th:block>
+            </div>
+        </div>
+
+        <div th:if="${camps == null or #lists.isEmpty(camps)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
+            <div style="background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+                <div style="font-size: 4rem; color: #9b59b6; margin-bottom: 1rem;">🏕️</div>
+                <h3 style="color: #9b59b6; margin-bottom: 1rem;">No Luxury Camps Available</h3>
+                <p style="color: #666; margin-bottom: 2rem;">There are no luxury camps listed at the moment. Check back soon!</p>
+                <a th:href="@{/parks/user}" class="back-btn">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.camp-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
+</body>
+</html>
