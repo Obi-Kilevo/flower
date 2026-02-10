@@ -1183,10 +1183,10 @@
 <section id="popular-trips" class="popular-trips container">
     <h2 class="section-heading">Our Popular Camps</h2>
     <div class="trips-grid">
-        <!-- Dynamic Camps from Database -->
-        <div th:each="camp : ${camps}" class="trip-card">
-            <!-- TOP SELLER badge for first camp -->
-            <span th:if="${campStat.first}" class="trip-badge">TOP SELLER</span>
+        <!-- Dynamic Camps from Database (stat for index tracking) -->
+        <div th:each="camp, stat : ${camps}" class="trip-card">
+            <!-- TOP SELLER badge for first camp (fixed stat variable) -->
+            <span th:if="${stat.first}" class="trip-badge">TOP SELLER</span>
 
             <!-- Camp Image -->
             <th:block th:if="${camp.imageUrl != null and !camp.imageUrl.isEmpty()}">
@@ -1233,7 +1233,12 @@
                     </div>
                 </div>
 
-                <a href="#contact" class="cta-btn">Book This Camp</a>
+                <!-- FINAL CORRECTED LINK (Swaps Luxury ↔ Mid-Range) -->
+                <a
+                        th:href="@{${stat.index == 0 ? '/mcamps/all' : (stat.index == 1 ? '/bcamps/all' : '/lcamps/all')}}"
+                        class="cta-btn">
+                    Book This Camp
+                </a>
             </div>
         </div>
 
@@ -1243,9 +1248,6 @@
         </div>
     </div>
 </section>
-
-
-
 
 
 
