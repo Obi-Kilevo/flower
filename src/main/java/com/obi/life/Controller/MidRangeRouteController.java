@@ -1,6 +1,7 @@
 package com.obi.life.Controller;
 
 import com.obi.life.Entity.MidRangeRouteEntity;
+import com.obi.life.Entity.MountainsEntity;
 import com.obi.life.Repository.MidRangeRouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -120,6 +121,17 @@ public class MidRangeRouteController {
             return "routes/midrange/routespath/" + route.get().getFormPath();
         }
 
+        return "redirect:/mroutes/all";
+    }
+
+
+    @GetMapping("/view/{formPath}")
+    public String routeByFormPath(@PathVariable String formPath, Model model) {
+        Optional<MidRangeRouteEntity> route = midRangeRouteRepository.findByFormPath(formPath);
+        if (route.isPresent()) {
+            model.addAttribute("route", route.get());
+            return "routes/midrange/routespath/" + formPath; // looks for routes/midrange/routespath/1.html etc.
+        }
         return "redirect:/mroutes/all";
     }
 }

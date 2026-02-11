@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Face Routes | ParkAdventure</title>
 
-    <!-- Same CSS as your main page -->
     <style>
-        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -21,7 +19,6 @@
             background-color: #f8f9fa;
         }
 
-        /* Header & Navigation */
         header {
             background: #0a4d2b;
             color: white;
@@ -57,7 +54,6 @@
             color: #a8e6cf;
         }
 
-        /* Hero Section */
         .hero {
             height: 50vh;
             display: flex;
@@ -68,8 +64,10 @@
             padding: 0 5%;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(rgba(10, 77, 43, 0.8), rgba(10, 77, 43, 0.9)),
-            url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+            /* Pale blue gradient overlay (unchanged) */
+            background: linear-gradient(rgba(10, 100, 150, 0.7), rgba(10, 100, 150, 0.8)),
+                /* 👇 EDIT THIS URL TO CHANGE BACKGROUND IMAGE 👇 */
+            url('https://images.pexels.com/photos/29198900/pexels-photo-29198900.jpeg');
             background-size: cover;
             background-position: center;
             margin-bottom: 4rem;
@@ -88,132 +86,6 @@
             opacity: 0.9;
         }
 
-        /* Section Common Styles */
-        .section-heading {
-            color: #0a4d2b;
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.2rem;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 4rem auto;
-            padding: 0 5%;
-        }
-
-        /* Routes Grid */
-        .routes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .route-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .route-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .route-header {
-            background: #0a4d2b;
-            color: white;
-            padding: 1.2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .route-difficulty {
-            background: #ff8c00;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .route-content {
-            padding: 1.8rem;
-        }
-
-        .route-stats {
-            display: flex;
-            justify-content: space-between;
-            margin: 1.5rem 0;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1.5rem;
-        }
-
-        .route-stat {
-            text-align: center;
-        }
-
-        .route-stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #0a4d2b;
-            margin-bottom: 0.3rem;
-        }
-
-        .route-stat-label {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .route-highlights {
-            margin: 1.5rem 0;
-        }
-
-        .route-highlights h4 {
-            color: #0a4d2b;
-            margin-bottom: 1rem;
-        }
-
-        .route-highlights ul {
-            list-style-position: inside;
-            padding-left: 0.5rem;
-        }
-
-        .route-highlights li {
-            margin-bottom: 0.8rem;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .route-highlights li span:first-child {
-            position: absolute;
-            left: 0;
-            color: #ff8c00;
-        }
-
-        .cta-btn {
-            background: #ff8c00;
-            color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s;
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        .cta-btn:hover {
-            background: #e07b00;
-        }
-
-        /* Count Badge */
         .routes-count {
             background: #ff8c00;
             color: white;
@@ -225,27 +97,30 @@
             margin: 1rem 0;
         }
 
-        /* Back Button */
-        .nav-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: #0a4d2b;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: 600;
-            transition: all 0.3s;
-            margin: 2rem 0;
+        /* Updated: Central content (no white background) */
+        .central-content {
+            max-width: 1200px;
+            margin: 0 auto 6rem; /* Center align + bottom margin */
+            padding: 0 5%;
+            text-align: center; /* Keep text centered */
         }
 
-        .nav-button:hover {
-            background: #083b21;
-            transform: translateY(-2px);
+        /* Style for headings in central section */
+        .central-content h2 {
+            font-size: 2.2rem;
+            color: #0a4d2b; /* Match header green */
+            margin-bottom: 1.5rem;
         }
 
-        /* Footer */
+        /* Style for paragraph text in central section */
+        .central-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #333; /* Match main body text color */
+        }
+
         footer {
             background: #0a4d2b;
             color: white;
@@ -272,7 +147,6 @@
             text-decoration: underline;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .header-container {
                 flex-direction: column;
@@ -283,18 +157,14 @@
                 font-size: 2rem;
             }
 
-            .section-heading {
+            /* Responsive adjustment for central section */
+            .central-content h2 {
                 font-size: 1.8rem;
-            }
-
-            .routes-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-<!-- Header -->
 <header>
     <div class="header-container">
         <nav>
@@ -308,125 +178,24 @@
     </div>
 </header>
 
-<!-- Hero Section -->
 <section class="hero">
     <div class="hero-content">
-        <h1>All Face Routes</h1>
-        <p>Discover all our featured adventure routes with detailed information</p>
+        <h1>MidRange Routes</h1>
+        <p>4 - Day Fly in MidRange HoneyMoon safaris 🐆</p>
         <div class="routes-count">
-            <span th:text="${faceroute.size()}">0</span> Routes Available
         </div>
     </div>
 </section>
 
-<!-- All Face Routes Section -->
-<section class="container">
-    <h2 class="section-heading">Explore All Face Routes</h2>
-
-    <div class="routes-grid">
-        <!-- Dynamic FaceRoute from Database -->
-        <div th:each="route : ${faceroute}" class="route-card">
-            <div class="route-header">
-                <h3 th:text="${route.routeName} ?: 'Unnamed Route'">Route Name</h3>
-                <span class="route-difficulty" th:text="${route.status} ?: 'available'">Status</span>
-            </div>
-
-            <!-- Image Container -->
-            <div style="position: relative;">
-                <th:block th:if="${route.imageUrl != null and route.imageUrl != ''}">
-                    <img th:src="${route.imageUrl}"
-                         th:alt="${route.routeName}"
-                         style="width:100%; height:250px; object-fit:cover;"
-                         onerror="handleImageError(this)" />
-                </th:block>
-                <th:block th:unless="${route.imageUrl != null and route.imageUrl != ''}">
-                    <div style="width:100%;height:250px;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;background:#f5f5f5;">
-                        <div>
-                            <i style="font-size:3rem;">🏞️</i><br>
-                            Image Not Provided
-                        </div>
-                    </div>
-                </th:block>
-                <th:block th:if="${route.showPrice != null and route.showPrice and route.price != null}">
-                    <div style="position: absolute; bottom: 15px; left: 15px; background: rgba(10, 77, 43, 0.9); color: white; padding: 8px 16px; border-radius: 6px; font-weight: 600; box-shadow: 0 3px 8px rgba(0,0,0,0.2);">
-                        $<span th:text="${#numbers.formatDecimal(route.price, 1, 2)}">0.00</span> pp (USD)
-                    </div>
-                </th:block>
-            </div>
-
-            <div class="route-content">
-                <div class="route-stats">
-                    <div class="route-stat">
-                        <div class="route-stat-value" th:text="${route.parkName} ?: 'National Park'">Park</div>
-                        <div class="route-stat-label">Park Name</div>
-                    </div>
-                </div>
-
-                <p th:text="${route.description} ?: 'Explore this amazing route through beautiful landscapes and scenic views.'">
-                    Route description...
-                </p>
-
-                <div class="route-highlights">
-                    <h4>Route Details</h4>
-                    <ul>
-                        <li th:if="${route.descAdventureType != null and route.descAdventureType != ''}">
-                            <span>⭐</span> <span th:text="${route.descAdventureType}">Adventure Type</span>
-                        </li>
-                        <li th:if="${route.descDuration != null and route.descDuration != ''}">
-                            <span>⏱️</span> <span th:text="${route.descDuration}">Duration</span>
-                        </li>
-                        <li th:if="${route.descMeals != null and route.descMeals != ''}">
-                            <span>🍽️</span> <span th:text="${route.descMeals}">Meals</span>
-                        </li>
-                        <li th:if="${route.descAccommodation != null and route.descAccommodation != ''}">
-                            <span>🏨</span> <span th:text="${route.descAccommodation}">Accommodation</span>
-                        </li>
-                        <li th:if="${route.descActivities != null and route.descActivities != ''}">
-                            <span>🚶‍♂️</span> <span th:text="${route.descActivities}">Activities</span>
-                        </li>
-                        <li th:if="${route.descTransport != null and route.descTransport != ''}">
-                            <span>🚗</span> <span th:text="${route.descTransport}">Transport</span>
-                        </li>
-                        <li th:if="${route.showPrice != null and route.showPrice and route.price != null}">
-                            <span>💰</span> $<span th:text="${#numbers.formatDecimal(route.price, 1, 2)}">0.00</span> pp (USD)
-                        </li>
-                        <li>
-                            <span>📊</span> <span th:text="${route.status} ?: 'available'">Available</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Button with formPath -->
-                <a th:href="${route.formPath}"
-                   th:if="${route.formPath != null and route.formPath != ''}"
-                   class="cta-btn">
-                    Book This Route →
-                </a>
-                <a href="/parks/routes/all"
-                   th:unless="${route.formPath != null and route.formPath != ''}"
-                   class="cta-btn">
-                    Learn About This Route
-                </a>
-            </div>
-        </div>
-
-        <!-- Fallback if no routes -->
-        <div th:if="${#lists.isEmpty(faceroute)}" style="text-align: center; padding: 40px; grid-column: 1 / -1;">
-            <h3 style="color: #0a4d2b; margin-bottom: 1rem;">No Face Routes Available</h3>
-            <p style="color: #666; margin-bottom: 2rem;">
-                No face routes are currently available. Check back soon!
-            </p>
-            <a th:href="@{/}" class="nav-button">← Return to Homepage</a>
-        </div>
-    </div>
-
-    <!-- Back Button -->
-    <div style="text-align: center; margin-top: 4rem;">
-        <a th:href="@{/parks/routes/all}" class="nav-button">← Return to Homepage</a>
-    </div>
+<!-- Central Content Section (Uses main page background) -->
+<section class="central-content">
+    <h2>你好 👋
+    Obi is will place more Data soon!!! Thanks</h2>
+    <p>Tafadhali Kuwa mvumilivu.</p>
+<!--    <p>Example: Explore our curated collection of face routes across national parks, designed for adventurers of all skill levels. Each route includes detailed trail maps, difficulty ratings, and safety tips.</p>-->
+    <!-- Add more content here (text, images, links, etc.) -->
 </section>
 
-<!-- Footer -->
 <footer>
     <ul class="footer-links">
         <li><a th:href="@{/}">Home</a></li>
@@ -438,7 +207,6 @@
 </footer>
 
 <script>
-    // Image error handler
     function handleImageError(img) {
         img.onerror = null;
         img.style.display = 'none';

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Face Routes | ParkAdventure</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: #0a4d2b;
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #a8e6cf;
+        }
+
+        .hero {
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            /* UPDATED: Pale purple gradient (replaced pale blue) */
+            background: linear-gradient(rgba(120, 80, 180, 0.7), rgba(120, 80, 180, 0.8)),
+                /* 👇 EDIT THIS URL TO CHANGE BACKGROUND IMAGE 👇 */
+            url('https://images.pexels.com/photos/33650635/pexels-photo-33650635.jpeg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .routes-count {
+            background: #ff8c00;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        /* Updated: Central content (no white background) */
+        .central-content {
+            max-width: 1200px;
+            margin: 0 auto 6rem; /* Center align + bottom margin */
+            padding: 0 5%;
+            text-align: center; /* Keep text centered */
+        }
+
+        /* Style for headings in central section */
+        .central-content h2 {
+            font-size: 2.2rem;
+            color: #0a4d2b; /* Match header green */
+            margin-bottom: 1.5rem;
+        }
+
+        /* Style for paragraph text in central section */
+        .central-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #333; /* Match main body text color */
+        }
+
+        footer {
+            background: #0a4d2b;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            /* Responsive adjustment for central section */
+            .central-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <nav>
+            <ul>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/parks/all}">National Parks</a></li>
+                <li><a th:href="@{/parks/routes/all}">All Routes</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Luxury Routes</h1>
+        <p>4 - Day Touch Of Wilderness Luxury</p>
+        <div class="routes-count">
+        </div>
+    </div>
+</section>
+
+<!-- Central Content Section (Uses main page background) -->
+<section class="central-content">
+    <h2>你好 👋
+        Obi is will place more Data soon!!! Thanks</h2>
+    <p>Tafadhali Kuwa mvumilivu.</p>
+
+</section>
+
+<footer>
+    <ul class="footer-links">
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/parks/all}">National Parks</a></li>
+        <li><a th:href="@{/parks/routes/all}">All Routes</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
+</footer>
+
+<script>
+    function handleImageError(img) {
+        img.onerror = null;
+        img.style.display = 'none';
+
+        const container = img.parentElement;
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = 'width:100%;height:250px;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;flex-direction:column;background-color:#f8f9fa;';
+        errorDiv.innerHTML = `
+            <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
+            <div>Image Not Found</div>
+        `;
+
+        container.innerHTML = '';
+        container.appendChild(errorDiv);
+    }
+</script>
+</body>
+</html>

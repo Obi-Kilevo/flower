@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Mountains | ParkAdventure</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { line-height: 1.6; color: #333; background-color: #f8f9fa; }
+    <title>All Face Routes | ParkAdventure</title>
 
-        /* Header */
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
         header {
             background: #0a4d2b;
             color: white;
@@ -18,6 +28,7 @@
             top: 0;
             z-index: 100;
         }
+
         .header-container {
             display: flex;
             justify-content: space-between;
@@ -25,61 +36,91 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        nav ul { display: flex; list-style: none; gap: 2rem; }
-        nav a { color: white; text-decoration: none; font-weight: 500; }
-        nav a:hover { color: #a8e6cf; }
 
-        /* Single Background Image */
-        .hero, .park-card {
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
-            url('https://images.pexels.com/photos/868097/pexels-photo-868097.jpeg');
-            background-size: cover;
-            background-position: center;
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        /* Hero Section */
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #a8e6cf;
+        }
+
         .hero {
-            height: 60vh;
+            height: 50vh;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             text-align: center;
             padding: 0 5%;
-        }
-        .hero-content { max-width: 800px; }
-        .hero-content h1 { font-size: 3rem; margin-bottom: 2rem; }
-
-        /* Section */
-        .section-heading {
-            color: #0a4d2b;
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.2rem;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 4rem auto;
-            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+            /* UPDATED: Pale purple gradient overlay (matches your image) */
+            background: linear-gradient(rgba(120, 80, 180, 0.7), rgba(120, 80, 180, 0.8)),
+                /* 👇 EDIT THIS URL TO CHANGE BACKGROUND IMAGE 👇 */
+            url('https://images.pexels.com/photos/618960/pexels-photo-618960.jpeg');
+            background-size: cover;
+            background-position: center;
+            margin-bottom: 4rem;
         }
 
-        /* CTA Button */
-        .cta-btn, .nav-button {
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .routes-count {
             background: #ff8c00;
             color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 4px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
             font-size: 1rem;
             font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
             display: inline-block;
-            transition: background 0.3s;
+            margin: 1rem 0;
         }
-        .cta-btn:hover, .nav-button:hover { background: #e07b00; }
 
-        /* Footer */
+        /* Updated: Central content (no white background) */
+        .central-content {
+            max-width: 1200px;
+            margin: 0 auto 6rem; /* Center align + bottom margin */
+            padding: 0 5%;
+            text-align: center; /* Keep text centered */
+        }
+
+        /* Style for headings in central section */
+        .central-content h2 {
+            font-size: 2.2rem;
+            color: #0a4d2b; /* Match header green */
+            margin-bottom: 1.5rem;
+        }
+
+        /* Style for paragraph text in central section */
+        .central-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: #333; /* Match main body text color */
+        }
+
         footer {
             background: #0a4d2b;
             color: white;
@@ -87,6 +128,7 @@
             text-align: center;
             margin-top: 6rem;
         }
+
         .footer-links {
             display: flex;
             justify-content: center;
@@ -95,14 +137,30 @@
             margin-bottom: 1rem;
             flex-wrap: wrap;
         }
-        .footer-links a { color: white; text-decoration: none; }
-        .footer-links a:hover { text-decoration: underline; }
 
-        /* Responsive */
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
         @media (max-width: 768px) {
-            .header-container { flex-direction: column; gap: 1rem; }
-            .hero-content h1 { font-size: 2rem; }
-            .section-heading { font-size: 1.8rem; }
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            /* Responsive adjustment for central section */
+            .central-content h2 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -111,10 +169,9 @@
     <div class="header-container">
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="#national-parks">National Parks</a></li>
-                <li><a href="#routes">Routes</a></li>
-                <li><a href="#epic-adventures">Epic Adventures</a></li>
+                <li><a th:href="@{/}">Home</a></li>
+                <li><a th:href="@{/parks/all}">National Parks</a></li>
+                <li><a th:href="@{/parks/routes/all}">All Routes</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -123,43 +180,48 @@
 
 <section class="hero">
     <div class="hero-content">
-        <h1>Kitulo National Park</h1>
+        <h1>Luxury Routes</h1>
+        <p>7 - Day Journey of the WildBeest</p>
+        <div class="routes-count">
+        </div>
     </div>
 </section>
 
-<section id="mountains-grid-section" class="container">
-    <h2 class="section-heading">Hello! Obi will place data soon</h2>
-    <p style="color: #666; margin-top: 1rem;">tafadhali kuwa mvumilivu</p>
-
-    <div style="text-align: center; margin-top: 4rem;">
-        <a href="/parks/all" class="nav-button">← Return to Homepage</a>
-    </div>
+<!-- Central Content Section (Uses main page background) -->
+<section class="central-content">
+    <h2>你好 👋
+        Obi is will place more Data soon!!! Thanks</h2>
+    <p>Tafadhali Kuwa mvumilivu.</p>
+    <!--    <p>Example: Explore our curated collection of face routes across national parks, designed for adventurers of all skill levels. Each route includes detailed trail maps, difficulty ratings, and safety tips.</p>-->
+    <!-- Add more content here (text, images, links, etc.) -->
 </section>
 
 <footer>
     <ul class="footer-links">
-        <li><a href="/parks/all">National Parks</a></li>
-        <li><a href="/mountain/all">Mountains</a></li>
-        <li><a href="#routes">Routes</a></li>
-        <li><a href="#epic-adventures">Epic Adventures</a></li>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/parks/all}">National Parks</a></li>
+        <li><a th:href="@{/parks/routes/all}">All Routes</a></li>
         <li><a href="#contact">Contact</a></li>
     </ul>
     <p>&copy; 2026 ParkAdventure. All rights reserved.</p>
 </footer>
 
 <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetElement = document.querySelector(this.getAttribute('href'));
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 80,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
+    function handleImageError(img) {
+        img.onerror = null;
+        img.style.display = 'none';
+
+        const container = img.parentElement;
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = 'width:100%;height:250px;display:flex;align-items:center;justify-content:center;color:#888;font-size:1.1em;flex-direction:column;background-color:#f8f9fa;';
+        errorDiv.innerHTML = `
+            <div style="font-size:3rem;margin-bottom:10px;">⚠️</div>
+            <div>Image Not Found</div>
+        `;
+
+        container.innerHTML = '';
+        container.appendChild(errorDiv);
+    }
 </script>
 </body>
 </html>
