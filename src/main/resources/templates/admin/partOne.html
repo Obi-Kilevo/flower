@@ -39,14 +39,21 @@
     <div class="btn-grid">
         <!-- Buttons link to backend paths (YOU define the paths in your backend) -->
         <button class="admin-btn btn-view" onclick="navigateTo('/parks/admin')">About Parks</button>
+        <button class="admin-btn" onclick="navigateTo('/parks/admin/list')">All Parks Lists</button>
+
         <button class="admin-btn btn-edit" onclick="navigateTo('/lcamps/admin')">Luxury Camps</button>
         <button class="admin-btn btn-edit" onclick="navigateTo('/bcamps/admin')">Budget Camps</button>
         <button class="admin-btn btn-edit" onclick="navigateTo('/mcamps/admin')">Mid-Range Camps</button>
-        <button class="admin-btn btn-edit" onclick="navigateTo('/lodges/admin')">Lodge Hotels</button>
+
+        <button class="admin-btn btn-edit" onclick="navigateTo('/lodges/admin')">Luxury Lodge</button>
+        <button class="admin-btn btn-edit" onclick="navigateTo('/mlodges/admin')">Mid-Range Lodge</button>
+        <button class="admin-btn btn-edit" onclick="navigateTo('/blodges/admin')">Budget Lodge</button>
+
         <button class="admin-btn btn-view" onclick="navigateTo('/luxury/admin')">Luxury Hotels</button>
-        <button class="admin-btn" onclick="navigateTo('/bhotels/admin')">Budget Hotels</button>
         <button class="admin-btn" onclick="navigateTo('/mhotels/admin')">Mid-range Hotels</button>
-        <button class="admin-btn" onclick="navigateTo('/parks/admin/list')">All Parks Lists</button>
+        <button class="admin-btn" onclick="navigateTo('/bhotels/admin')">Budget Hotels</button>
+
+
         <button class="admin-btn" onclick="navigateTo('/lroutes/admin')">Luxury Routes</button>
         <button class="admin-btn" onclick="navigateTo('/mroutes/admin')">Mid-Range Routes</button>
         <button class="admin-btn" onclick="navigateTo('/broutes/admin')">Budget Routes</button>
