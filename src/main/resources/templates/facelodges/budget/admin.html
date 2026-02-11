@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Budget Lodges</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; padding-top: 20px; }
+    .header { background-color: #27ae60; color: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+    .lodge-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 20px; background-color: white; }
+    .action-buttons { display: flex; gap: 10px; margin-top: 10px; }
+    .price-badge { background-color: #2ecc71; color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1>🏨 Budget Lodges Management</h1>
+    <p class="mb-0">Admin Control Panel for Budget Lodges</p>
+  </div>
+
+  <!-- Add New Lodge Form -->
+  <div class="card mb-4">
+    <div class="card-header text-white" style="background-color: #27ae60;">
+      <h5 class="mb-0">➕ Add New Budget Lodge</h5>
+    </div>
+    <div class="card-body">
+      <form th:action="@{/blodges/admin}" th:object="${newLodge}" method="post">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Lodge Name *</label>
+            <input type="text" class="form-control" th:field="*{name}" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">City</label>
+            <input type="text" class="form-control" th:field="*{city}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Country</label>
+            <input type="text" class="form-control" th:field="*{country}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" th:field="*{address}">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Price ($)</label>
+            <input type="number" class="form-control" th:field="*{price}" step="0.01">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Currency</label>
+            <select class="form-select" th:field="*{currency}">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Form Path</label>
+            <input type="text" class="form-control" th:field="*{formPath}"
+                   placeholder="e.g., budget-lodge-name">
+          </div>
+          <div class="col-12">
+            <label class="form-label">Features</label>
+            <textarea class="form-control" th:field="*{features}" rows="3"
+                      placeholder="e.g., Basic rooms, Shared bathrooms, Common kitchen, Free WiFi, Common lounge"></textarea>
+          </div>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header bg-info text-white">
+                <h6 class="mb-0">🖼️ Lodge Image (Optional)</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label class="form-label">Image URL or Path</label>
+                  <input type="text" class="form-control" th:field="*{imageUrl}"
+                         placeholder="Enter direct URL or static path">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn text-white" style="background-color: #27ae60;">Add Lodge</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- List of Existing Lodges -->
+  <h2 class="mb-3">📋 Existing Budget Lodges</h2>
+
+  <div th:if="${#lists.isEmpty(lodges)}" class="alert alert-info">
+    No budget lodges found. Add your first lodge above!
+  </div>
+
+  <div th:each="lodge : ${lodges}" class="lodge-card">
+    <div class="row">
+      <div class="col-md-8">
+        <h4 th:text="${lodge.name}">Lodge Name</h4>
+        <p class="text-muted mb-2">
+          <strong>Location:</strong>
+          <span th:text="${lodge.city} ?: 'City not set'"></span>,
+          <span th:text="${lodge.country} ?: 'Country not set'"></span>
+        </p>
+        <p th:if="${lodge.address}" class="mb-2">
+          <strong>Address:</strong> <span th:text="${lodge.address}"></span>
+        </p>
+        <p th:if="${lodge.features}" class="mb-2">
+          <strong>Features:</strong> <span th:text="${lodge.features}"></span>
+        </p>
+
+        <div class="mb-2">
+          <strong>Form Path:</strong>
+          <div class="small">
+            <code th:text="${lodge.formPath} ?: 'Not set'"></code>
+          </div>
+        </div>
+
+        <div class="d-flex gap-3 align-items-center">
+                    <span><strong>Price:</strong>
+                        <span th:if="${lodge.price != null}">
+                            <span class="price-badge">
+                                <span th:text="${lodge.currency} ?: 'USD'"></span>
+                                <span th:text="${#numbers.formatDecimal(lodge.price, 1, 2)}">0.00</span>
+                            </span>
+                        </span>
+                        <span th:if="${lodge.price == null}">Not set</span>
+                    </span>
+        </div>
+        <div th:if="${lodge.imageUrl}" class="mt-2">
+          <small><strong>Image URL:</strong> <a th:href="${lodge.imageUrl}" target="_blank" th:text="${lodge.imageUrl}"></a></small>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="action-buttons">
+          <a th:href="@{/blodges/admin/edit/{id}(id=${lodge.id})}"
+             class="btn btn-warning btn-sm">✏️ Edit</a>
+
+          <form th:action="@{/blodges/admin/delete/{id}(id=${lodge.id})}"
+                method="post"
+                onsubmit="return confirm('Delete this lodge?');">
+            <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete</button>
+          </form>
+        </div>
+
+        <div class="mt-2 text-muted small">
+          <div th:if="${lodge.createdAt}">
+            Created: <span th:text="${#temporals.format(lodge.createdAt, 'yyyy-MM-dd HH:mm')}">Date</span>
+          </div>
+          <div th:if="${lodge.updatedAt}">
+            Updated: <span th:text="${#temporals.format(lodge.updatedAt, 'yyyy-MM-dd HH:mm')}">Date</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

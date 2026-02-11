@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/parks")
@@ -33,7 +32,7 @@ public class NationalParksController {
 
 
     @Autowired
-    private LodgesRepository  lodgeRepository;
+    private LuxuryLodgesRepository lodgeRepository;
 
 
     @Autowired
@@ -61,6 +60,8 @@ public class NationalParksController {
 
     @Autowired
     private CurrencyRepository  currencyRepository;
+    @Autowired
+    private FaceLodgesRepository faceLodgesRepository;
 
 
     // =================== JSON API ===================
@@ -138,7 +139,7 @@ public class NationalParksController {
         model.addAttribute("camps", camps);
 
 
-        List<LodgesEntity> lodges = lodgeRepository.findAll().stream()
+        List<FaceLodgesEntity> lodges = faceLodgesRepository.findAll().stream()
                 .limit(3)  // Show max 3 lodges
                 .toList();
         model.addAttribute("lodges", lodges);

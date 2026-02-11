@@ -1,7 +1,7 @@
 package com.obi.life.Controller;
 
-import com.obi.life.Entity.LodgesEntity;
-import com.obi.life.Repository.LodgesRepository;
+import com.obi.life.Entity.LuxuryLodgesEntity;
+import com.obi.life.Repository.LuxuryLodgesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,21 +12,21 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/lodges")
-public class LodgesController {
+public class LuxuryLodgesController {
 
     @Autowired
-    private LodgesRepository lodgesRepository;
+    private LuxuryLodgesRepository lodgesRepository;
 
     // =================== ADMIN ONLY ===================
     @GetMapping("/admin")
     public String adminLodges(Model model) {
         model.addAttribute("lodges", lodgesRepository.findAll());
-        model.addAttribute("newLodge", new LodgesEntity());
-        return "lodges/admin";
+        model.addAttribute("newLodge", new LuxuryLodgesEntity());
+        return "facelodges/luxury/admin";
     }
 
     @PostMapping("/admin")
-    public String addLodgeFromForm(@ModelAttribute LodgesEntity newLodge) {
+    public String addLodgeFromForm(@ModelAttribute LuxuryLodgesEntity newLodge) {
         lodgesRepository.save(newLodge);
         return "redirect:/lodges/admin";
     }
@@ -39,17 +39,17 @@ public class LodgesController {
 
     @GetMapping("/admin/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<LodgesEntity> lodge = lodgesRepository.findById(id);
+        Optional<LuxuryLodgesEntity> lodge = lodgesRepository.findById(id);
         if (lodge.isEmpty()) return "redirect:/lodges/admin";
         model.addAttribute("lodge", lodge.get());
-        return "lodges/edit";
+        return "facelodges/luxury/edit";
     }
 
     @PostMapping("/admin/update/{id}")
-    public String updateLodge(@PathVariable Long id, @ModelAttribute LodgesEntity updatedLodge) {
-        Optional<LodgesEntity> lodge = lodgesRepository.findById(id);
+    public String updateLodge(@PathVariable Long id, @ModelAttribute LuxuryLodgesEntity updatedLodge) {
+        Optional<LuxuryLodgesEntity> lodge = lodgesRepository.findById(id);
         if (lodge.isPresent()) {
-            LodgesEntity l = lodge.get();
+            LuxuryLodgesEntity l = lodge.get();
             l.setName(updatedLodge.getName());
             l.setCity(updatedLodge.getCity());
             l.setCountry(updatedLodge.getCountry());
@@ -59,8 +59,15 @@ public class LodgesController {
             l.setImageUrl(updatedLodge.getImageUrl());
             l.setFeatures(updatedLodge.getFeatures());
             l.setUpdatedAt(LocalDateTime.now());
+            l.setFormPath(updatedLodge.getFormPath());
             lodgesRepository.save(l);
         }
         return "redirect:/lodges/admin";
+    }
+
+        @GetMapping("/all")
+    public String allLodges(Model model) {
+        model.addAttribute("lodges", lodgesRepository.findAll());
+        return "facelodges/luxury/all";
     }
 }

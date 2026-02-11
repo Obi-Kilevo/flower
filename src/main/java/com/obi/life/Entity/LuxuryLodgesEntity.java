@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "lodges")
-public class LodgesEntity {
+@Table(name = "luxury_lodges")
+public class LuxuryLodgesEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +46,8 @@ public class LodgesEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
+    @Column(name = "form_path")
+    private String formPath;
 }

@@ -326,56 +326,6 @@
             min-height: 500px;
         }
 
-        /*.park-card::before {*/
-        /*    !* 使用伪元素作为背景图片容器 *!*/
-        /*    content: '';*/
-        /*    position: absolute;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*    background-size: cover;*/
-        /*    background-position: center;*/
-        /*    z-index: 1;*/
-        /*}*/
-
-        /* 为每个公园卡片设置对应的背景图片 */
-        /*.park-card:nth-child(1)::before {*/
-        /*    background-image: url('https://images.unsplash.com/photo-1518492104633-130d0cc84637?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');*/
-        /*}*/
-
-        /*.park-card:nth-child(2)::before {*/
-        /*    background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');*/
-        /*}*/
-
-        /*.park-card:nth-child(3)::before {*/
-        /*    background-image: url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');*/
-        /*}*/
-
-        /*.park-card:nth-child(4)::before {*/
-        /*    background-image: url('https://images.unsplash.com/photo-1513309914637-682d25faa06e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');*/
-        /*}*/
-
-        /* 添加半透明叠加层，确保文字清晰可读 */
-        /*.park-card::after {*/
-        /*    content: '';*/
-        /*    position: absolute;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));*/
-        /*    z-index: 2;*/
-        /*}*/
-
-        /*.park-card:hover {*/
-        /*    transform: translateY(-5px);*/
-        /*}*/
-
-        /*!* 移除原有图片元素的显示 *!*/
-        /*.park-img {*/
-        /*    display: none;*/
-        /*}*/
 
         .park-content {
             /* 关键修改：内容层叠在背景之上 */
@@ -918,6 +868,9 @@
                 console.log('Mountain Image URL:', /*[[${mountain.imageUrl}]]*/ '');
                 console.log('Mountain Style Applied:', document.currentScript.closest('.park-card').style.backgroundImage);
             </script>
+
+
+
 <!--            <div class="park-content">-->
 <!--                <h3 th:text="${mountain.name}">Mountain Name</h3>-->
 <!--                <div class="park-location">Mountain Adventure</div>-->
@@ -1252,18 +1205,20 @@
 
 
 
+
+
 <!-- Popular lodge Section (Dynamic from Database) -->
 <section id="popular-lodge" class="popular-trips container">
     <h2 class="section-heading">Our Most Popular Lodge</h2>
     <div class="trips-grid">
-        <!-- Dynamic Lodges from Database -->
-        <div th:each="lodge : ${lodges}" class="trip-card">
-            <!-- TOP SELLER badge for first lodge -->
-            <span th:if="${lodgeStat.first}" class="trip-badge">TOP SELLER</span>
-            <!-- BEST VALUE badge for second lodge -->
-            <span th:if="${lodgeStat.index == 1}" class="trip-badge" style="background: #2e7d32;">BEST VALUE</span>
-            <!-- NEW badge for third lodge -->
-            <span th:if="${lodgeStat.index == 2}" class="trip-badge" style="background: #1565c0;">NEW</span>
+        <!-- Dynamic Lodges from Database (stat for index tracking) -->
+        <div th:each="lodge, stat : ${lodges}" class="trip-card">
+            <!-- TOP SELLER badge for first lodge (fixed stat variable) -->
+            <span th:if="${stat.first}" class="trip-badge">TOP SELLER</span>
+            <!-- BEST VALUE badge for second lodge (fixed stat variable) -->
+            <span th:if="${stat.index == 1}" class="trip-badge" style="background: #2e7d32;">BEST VALUE</span>
+            <!-- NEW badge for third lodge (fixed stat variable) -->
+            <span th:if="${stat.index == 2}" class="trip-badge" style="background: #1565c0;">NEW</span>
 
             <!-- Lodge Image -->
             <th:block th:if="${lodge.imageUrl != null and !lodge.imageUrl.isEmpty()}">
@@ -1310,7 +1265,12 @@
                     </div>
                 </div>
 
-                <a href="#contact" class="cta-btn">Book This Lodge</a>
+                <!-- FINAL CORRECTED LINK (Swaps Luxury ↔ Mid-Range) -->
+                <a
+                        th:href="@{${stat.index == 0 ? '/mlodges/all' : (stat.index == 1 ? '/lodges/all' : '/blodges/all')}}"
+                        class="cta-btn">
+                    Book This Lodge
+                </a>
             </div>
         </div>
 
@@ -1320,8 +1280,6 @@
         </div>
     </div>
 </section>
-
-
 
 
 
@@ -1430,22 +1388,6 @@
 
     // Start slideshow (change every 3000ms = 3 seconds)
     setInterval(nextSlide, 3000);
-
-    // 2. Search button functionality (header search)
-    const searchBtn = document.getElementById('search-btn');
-    const searchInput = document.getElementById('search-input');
-
-    searchBtn.addEventListener('click', () => {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        if (searchTerm) {
-            alert(`Searching for: "${searchTerm}" in national parks and adventures`);
-            searchInput.value = ''; // Clear input after search
-        } else {
-            alert('Please enter a search term!');
-        }
-    });
-
-
 
     // 4. Smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
